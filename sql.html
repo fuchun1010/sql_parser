@@ -671,6 +671,7 @@
 
 		function toSql(inputs, sql = []) {
 			//debugger
+			//TODO 代码多个condition有bug
 			const {operator, conditions} = inputs
 			let isUnion = operator === 'union'
 			let len = (Array.isArray(conditions) && conditions.length) || 0
