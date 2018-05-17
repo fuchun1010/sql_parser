@@ -604,7 +604,7 @@
 							c.push(selectFields)
 							fromTable = ` from ${fromTable} `
 							c.push(fromTable)
-							let where = toSql({operator, conditions}, [])
+							let where = toWhere({operator, conditions}, [])
 							groupBy = groupBy ? ` group by ${groupBy.map(g => g.fieldName).join(',')} `:''
 							havingBy = havingBy ? ` having ${havingBy.map(h => h.fieldName).join(',')}`: ''
 							c.push(` where ${where}`)
@@ -669,12 +669,13 @@
 			return obj[key]
 		}
 
-		function toSql(inputs, sql = []) {
+		function toWhere(inputs, sql = []) {
 			//debugger
 			//TODO 代码多个condition有bug
 			const {operator, conditions} = inputs
 			let isUnion = operator === 'union'
 			let len = (Array.isArray(conditions) && conditions.length) || 0
+
 			for(let i = 0; i < len; i++) {
 				let c = conditions[i]
 				if(isUnion) {
@@ -683,7 +684,7 @@
 					sql.push(selectSmt)
 					let fromSmt = ` from ${fromTable} where `
 					sql.push(fromSmt)
-					let whereSmt = toSql({operator, conditions}, [])
+					let whereSmt = toWhere({operator, conditions}, [])
 					//debugger
 					sql.push(whereSmt)
 					let groupSmt = ` group by ${groupBy.map(field => field.fieldName).join(',')} `
@@ -726,7 +727,7 @@
 			return sql.join(" ", [])
 		}
 
-		const str =  toSql(unionSql2, [])
+		const str =  toWhere(unionSql2, [])
 		console.log(str)
 		// 
 		// const str = toHaving(havingBy, [])
