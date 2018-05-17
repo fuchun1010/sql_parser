@@ -643,9 +643,10 @@
 						let {op} = convertComparator(comparisonOperator)
 						let funField = (fun && fun.trim().length > 0) ? `${fun}(${fieldName})`: fieldName
 						let isCommonValue = valueType === 'value'
-						c.push(funField)
-						c.push(op)
+						
 						if(isCommonValue) {
+							c.push(funField)
+							c.push(op)
 							c.push(data.join(''))
 							let isAddedAnd = i != (len - 1)
 							if(isAddedAnd) {
@@ -655,6 +656,9 @@
 						else {
 							//TODO subQuery
 							let {selectFields, fromTable, operator, conditions, groupBy, havingBy} = data[0]
+							c.push(operator)
+							c.push(funField)
+							c.push(op)
 							c.push(" ( ")
 							selectFields = `select ${selectFields ? selectFields.map(field => {
 								let {fun,fieldName} = field
@@ -731,8 +735,6 @@
 
 		function toWhere(inputs, sql = []) {
 			//debugger
-			//TODO 代码多个condition有bug
-			debugger
 			const {operator, conditions} = inputs
 			let isUnion = operator === 'union'
 			let len = (Array.isArray(conditions) && conditions.length) || 0
