@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>unionSql</title>
+
+	<script type="text/javascript">
+		
+		var unionSql = {
+		  "operator": "union",
+		  "conditions": [
+		    {
+		      "selectFields": [
+		        {
+		          "fieldName": "c1",
+		          "fieldType": "number",
+		          "fun": ""
+		        },
+		        {
+		          "fieldName": "c2",
+		          "fieldType": "number",
+		          "fun": ""
+		        }
+		      ],
+		      "fromTable": "t1",
+		      "operator": "and",
+		      "conditions": [
+		        {
+		          "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+		          "nodeType": "condition",
+		          "comparisonOperator": "IN_OPTIONS",
+		          "values": {
+		            "valueType": "value",
+		            "data": [
+		              "BJ"
+		            ]
+		          },
+		          "item": {
+		            "fieldName": "location",
+		            "fieldType": "Text"
+		          }
+		        },
+		        {
+		          "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+		          "nodeType": "condition",
+		          "comparisonOperator": "IN_OPTIONS",
+		          "values": {
+		            "valueType": "subQuery",
+		            "data": {
+		              "selectFields": [
+		                {
+		                  "fieldName": "m1",
+		                  "fieldType": "number",
+		                  "fun": "sum"
+		                }
+		              ],
+		              "fromTable": "t2",
+		              "operator": "and",
+		              "conditions": {
+		                "operator": "and",
+		                "conditions": [
+		                  {
+		                    "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+		                    "nodeType": "condition",
+		                    "comparisonOperator": "eq",
+		                    "values": {
+		                      "valueType": "value",
+		                      "data": [
+		                        3
+		                      ]
+		                    },
+		                    "item": {
+		                      "fieldName": "c1",
+		                      "fieldType": "number"
+		                    }
+		                  },
+		                  {
+		                    "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+		                    "nodeType": "condition",
+		                    "comparisonOperator": "eq",
+		                    "values": {
+		                      "valueType": "subQuery",
+		                      "data": {
+		                        "selectFields": [
+		                          {
+		                            "fieldName": "m2",
+		                            "fieldType": "number"
+		                          }
+		                        ],
+		                        "fromTable": "t3",
+		                        "operator": "and",
+		                        "conditions": {
+		                          "operator": "and",
+		                          "conditions": [
+		                            {
+		                              "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+		                              "nodeType": "condition",
+		                              "comparisonOperator": "eq",
+		                              "values": {
+		                                "valueType": "value",
+		                                "data": [
+		                                  3
+		                                ]
+		                              },
+		                              "item": {
+		                                "fieldName": "c5",
+		                                "fieldType": "number"
+		                              }
+		                            }
+		                          ]
+		                        }
+		                      }
+		                    }
+		                  }
+		                ]
+		              }
+		            }
+		          },
+		          "item": {
+		            "fieldName": "location",
+		            "fieldType": "Text"
+		          }
+		        },
+		        {
+		          "nodeType": "group",
+		          "operator": "or",
+		          "id": "7b17487d-e274-498b-b7b5-c847854c3376",
+		          "conditions": [
+		            {
+		              "id": "04839167-db37-4be0-92cf-3236291821ff",
+		              "nodeType": "condition",
+		              "comparisonOperator": "gt",
+		              "values": [
+		                "3000"
+		              ],
+		              "item": {
+		                "fieldType": "Numeric",
+		                "fieldName": "sales"
+		              }
+		            },
+		            {
+		              "id": "bf8ba526-9ed5-49eb-b0f4-e8f73093892e",
+		              "nodeType": "condition",
+		              "comparisonOperator": "eq",
+		              "values": [
+		                "3"
+		              ],
+		              "item": {
+		                "fieldType": "Numeric",
+		                "fieldName": "id"
+		              }
+		            }
+		          ]
+		        }
+		      ],
+		      "groupBy": [
+		        {
+		          "fieldName": "c3"
+		        }
+		      ],
+		      "havingBy": {
+			      "operator": "or",
+			      "conditions": [
+			        {
+			          "id": "1",
+			          "nodeType": "condition",
+			          "comparisonOperator": "gt",
+			          "fieldName": "c1",
+			          "fieldType": "number",
+			          "fun": "sum",
+			          "values": {
+			            "valueType": "value",
+			            "data": [
+			              120
+			            ]
+			          }
+			        },
+			        {
+			        	"id": "2",
+			        	"operator": "and",
+			        	"nodeType": "group",
+			        	"conditions": [
+			        		{
+			        			"id": "3",
+			        			"nodeType": "condition",
+			        			"comparisonOperator": "eq",
+			        			"fieldName": "c2",
+					          "fieldType": "number",
+					          "fun": "avg",
+					          "values": {
+				              "valueType": "value",
+				              "data": [
+				                200
+				              ]
+				            }
+			        		},{
+			        			"id": "4",
+			        			"nodeType": "condition",
+			        			"nodeType": "condition",
+			        			"comparisonOperator": "eq",
+			        			"fieldName": "c2",
+					          "fieldType": "number",
+					          "fun": "count",
+					          "values": {
+				              "valueType": "value",
+				              "data": [
+				                100
+				              ]
+				            }
+			        		}
+			        	]
+			        }
+			      ]
+			    }
+		    }
+		  ]
+		}
+
+		var unionSql2 = {
+		  "operator": "union",
+		  "conditions": [
+		    {
+		      "selectFields": [
+		        {
+		          "fieldName": "c1",
+		          "fieldType": "number",
+		          "fun": ""
+		        },
+		        {
+		          "fieldName": "c2",
+		          "fieldType": "number",
+		          "fun": ""
+		        }
+		      ],
+		      "fromTable": "t1",
+		      "operator": "and",
+		      "conditions": [
+		        {
+		          "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+		          "nodeType": "condition",
+		          "comparisonOperator": "IN_OPTIONS",
+		          "values": {
+		            "valueType": "value",
+		            "data": [
+		              "BJ"
+		            ]
+		          },
+		          "item": {
+		            "fieldName": "location",
+		            "fieldType": "Text"
+		          }
+		        }
+		      ],
+		      "groupBy": [
+		        {
+		          "fieldName": "c3"
+		        }
+		      ],
+		      "havingBy": {
+			      "operator": "or",
+			      "conditions": [
+			        {
+			          "id": "1",
+			          "nodeType": "condition",
+			          "comparisonOperator": "gt",
+			          "fieldName": "c1",
+			          "fieldType": "number",
+			          "fun": "sum",
+			          "values": {
+			            "valueType": "value",
+			            "data": [
+			              120
+			            ]
+			          }
+			        },
+			        {
+			        	"id": "2",
+			        	"operator": "and",
+			        	"nodeType": "group",
+			        	"conditions": [
+			        		{
+			        			"id": "3",
+			        			"nodeType": "condition",
+			        			"comparisonOperator": "eq",
+			        			"fieldName": "c2",
+					          "fieldType": "number",
+					          "fun": "avg",
+					          "values": {
+				              "valueType": "value",
+				              "data": [
+				                200
+				              ]
+				            }
+			        		},{
+			        			"id": "4",
+			        			"nodeType": "condition",
+			        			"nodeType": "condition",
+			        			"comparisonOperator": "eq",
+			        			"fieldName": "c2",
+					          "fieldType": "number",
+					          "fun": "count",
+					          "values": {
+				              "valueType": "value",
+				              "data": [
+				                100
+				              ]
+				            }
+			        		}
+			        	]
+			        }
+			      ]
+			    }
+		    }
+		  ]
+		}
+
+		var unionSql3 = {
+		  "operator": "union",
+		  "conditions": [
+		    {
+		      "selectFields": [
+		        {
+		          "fieldName": "c1",
+		          "fieldType": "number",
+		          "fun": ""
+		        },
+		        {
+		          "fieldName": "c2",
+		          "fieldType": "number",
+		          "fun": ""
+		        }
+		      ],
+		      "fromTable": "t1",
+		      "operator": "and",
+		      "conditions": [
+		        {
+		          "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+		          "nodeType": "condition",
+		          "comparisonOperator": "IN_OPTIONS",
+		          "values": {
+		            "valueType": "value",
+		            "data": [
+		              "BJ"
+		            ]
+		          },
+		          "item": {
+		            "fieldName": "location",
+		            "fieldType": "Text"
+		          }
+		        }
+		      ],
+		      "groupBy": [
+		        {
+		          "fieldName": "c3"
+		        }
+		      ],
+		      "hivingBy": {
+		        "operator": "and",
+		        "conditions": [
+		          {
+		            "id": "xxxx",
+		            "nodeType": "condition",
+		            "comparisonOperator": "",
+		            "values": [
+		              {
+		                "valueType": "value",
+		                "data": [
+		                  "BJ"
+		                ]
+		              }
+		            ]
+		          }
+		        ]
+		      }
+		    }
+		  ]
+		}
+
+		var havingBy = {
+      "operator": "or",
+      "conditions": [
+        {
+          "id": "1",
+          "nodeType": "condition",
+          "comparisonOperator": "gt",
+          "fieldName": "c1",
+          "fieldType": "number",
+          "fun": "sum",
+          "values": {
+            "valueType": "value",
+            "data": [
+              120
+            ]
+          }
+        },
+        {
+        	"id": "2",
+        	"operator": "and",
+        	"nodeType": "group",
+        	"conditions": [
+        		{
+        			"id": "3",
+        			"nodeType": "condition",
+        			"comparisonOperator": "eq",
+        			"fieldName": "c2",
+		          "fieldType": "number",
+		          "fun": "avg",
+		          "values": {
+	              "valueType": "value",
+	              "data": [
+	                200
+	              ]
+	            }
+        		},{
+        			"id": "4",
+        			"nodeType": "condition",
+        			"nodeType": "condition",
+        			"comparisonOperator": "eq",
+        			"fieldName": "c2",
+		          "fieldType": "number",
+		          "fun": "count",
+		          "values": {
+	              "valueType": "value",
+	              "data": [
+	                100
+	              ]
+	            }
+        		}
+        	]
+        }
+      ]
+    }
+
+    var havingBy2 = {
+      "operator": "or",
+      "conditions": [
+        {
+          "id": "1",
+          "nodeType": "condition",
+          "comparisonOperator": "gt",
+          "fieldName": "c1",
+          "fieldType": "number",
+          "fun": "sum",
+          "values": {
+            "valueType": "value",
+            "data": [
+              120
+            ]
+          }
+        },
+        {
+        	"id": "2",
+        	"operator": "and",
+        	"nodeType": "group",
+        	"conditions": [
+        		{
+        			"id": "3",
+        			"nodeType": "condition",
+        			"comparisonOperator": "eq",
+        			"fieldName": "c2",
+		          "fieldType": "number",
+		          "fun": "avg",
+		          "values": {
+	              "valueType": "value",
+	              "data": [
+	                200
+	              ]
+	            }
+        		},{
+        			"id": "4",
+        			"nodeType": "condition",
+        			"nodeType": "condition",
+        			"comparisonOperator": "eq",
+        			"fieldName": "c2",
+		          "fieldType": "number",
+		          "fun": "count",
+		          "values": {
+	              "valueType": "value",
+	              "data": [
+	                100
+	              ]
+	            }
+        		}
+        	]
+        },
+        {
+        	"id": "3",
+        	"operator": "union",
+        	"nodeType": "condition",
+        	"comparisonOperator": "IN_OPTIONS",
+        	"values": {
+        		"valueType": "subQuery",
+        		"data": [
+	        		{
+	        			"selectFields": [
+	                {
+	                  "fieldName": "m1",
+	                  "fieldType": "number",
+	                  "fun": "sum"
+	                }
+	              ],
+	              "fromTable": "t2",
+	              "operator": "and",
+	              "conditions":[
+			             {
+			        			"id": "3",
+			        			"nodeType": "condition",
+			        			"comparisonOperator": "eq",
+			        			"fieldName": "c2",
+					          "fieldType": "number",
+					          "fun": "avg",
+					          "values": {
+				              "valueType": "value",
+				              "data": [
+				                200
+				              ]
+				            }
+			        		},
+			        		{
+			        			"id": "4",
+			        			"nodeType": "condition",
+			        			"nodeType": "condition",
+			        			"comparisonOperator": "eq",
+			        			"fieldName": "c2",
+					          "fieldType": "number",
+					          "fun": "count",
+					          "values": {
+				              "valueType": "value",
+				              "data": [
+				                100
+				              ]
+				            }
+			        		}
+	              ],
+	              "groupBy": [
+					        {
+					          "fieldName": "c3"
+					        }
+					      ]
+	        		}
+        		]
+        	}
+        }
+      ]
+    }
+
+		/**
+		 *  递归解析hiving
+		 * @param  {[type]} having [description]
+		 * @return {[type]}        [description]
+		 */
+		function toHaving(having, c = []) {
+			function convertHaving(having, c = []) {
+				let {operator, conditions} = having
+				let prefix = operator === 'or' ? `(`: `(1 = 1 and `
+				c.push(prefix)
+				let len = (Array.isArray(conditions) && conditions.length) || 0
+				for(let i = 0; i < len; i++) {
+					let cdt = conditions[i]
+					let {nodeType} = cdt 
+					let isCondition = nodeType === 'condition'
+					if(isCondition) {
+						let {comparisonOperator, fieldName, fun, values:{valueType, data}} = cdt
+						//debugger
+						let {op} = convertComparator(comparisonOperator)
+						let funField = `${fun}(${fieldName})`
+						let isCommonValue = valueType === 'value'
+						c.push(funField)
+						c.push(op)
+						if(isCommonValue) {
+							c.push(data.join(''))
+							let isAddedAnd = i != (len - 1)
+							if(isAddedAnd) {
+								c.push(operator)
+							}
+						}
+						else {
+							//TODO subQuery
+							debugger
+						}
+
+					}
+					else {
+						//process group
+						let result = convertHaving(cdt, [])
+						debugger
+						c.push(result)
+					}
+				}
+				c.push(')')
+				return c.join(' ')
+			}
+			const str = convertHaving(havingBy, [])
+			return `having ${str}`
+		}
+		
+		/**
+		 * 符号转换
+		 * @param  {[type]} op [description]
+		 * @return {[type]}    [description]
+		 */
+		function convertComparator(op) {
+			let key = op.toLowerCase()
+			let obj = {
+				in_options: {
+					range: true,
+					op: 'in'
+				},
+				eq: {
+					range: false,
+					op: '='
+				},
+				gte: {
+					range: false,
+					op: '>='
+				},
+				gt: {
+					range: false,
+					op: '>'
+				},
+				lte: {
+					range: false,
+					op: '<='
+				},
+				lt: {
+					range: false,
+					op: '<'
+				}
+			}
+			return obj[key]
+		}
+
+		function toSql(inputs, sql = []) {
+			debugger
+			const {operator, conditions} = inputs
+			let isUnion = operator === 'union'
+			let len = (Array.isArray(conditions) && conditions.length) || 0
+			for(let i = 0; i < len; i++) {
+				let c = conditions[i]
+				if(isUnion) {
+					let {selectFields, fromTable, operator, conditions, groupBy, hivingBy} = c
+					let selectSmt = `select ${selectFields.map(field => field.fieldName).join(',')}`
+					sql.push(selectSmt)
+					let fromSmt = ` from ${fromTable} where `
+					sql.push(fromSmt)
+					let whereSmt = toSql({operator, conditions}, [])
+					debugger
+					sql.push(whereSmt)
+					let groupSmt = ` group by ${groupBy.map(field => field.fieldName).join(',')} `
+					sql.push(groupSmt)
+				}
+				else {
+					//process condition
+					let isNotLast = i != (len - 1)
+					let {nodeType,comparisonOperator, values:{valueType, data}, item:{fieldType, fieldName}} = c
+					let isCondition = nodeType === 'condition'
+					let prefix = operator === 'and' ? `( 1 = 1 ${operator} `: " ( "
+					sql.push(prefix)
+					let {range, op} = convertComparator(comparisonOperator)
+					let isTextType = fieldType === 'Text'
+					let v = void 0
+					if(range) {
+						v = isTextType ? data.map(d => `'${d}'`): data
+						v = `(${v.join(',')})`
+					}
+					else {
+						v = isTextType ? data.map(d => `'${d}'`).join(''): data.join('')
+					}
+					sql.push(fieldName)
+					sql.push(op)
+					if(isCondition) {
+						sql.push(v)
+						if(isNotLast) {
+							sql.push(operator)
+						}
+					}
+					else {
+						//TODO process group
+					}
+					sql.push(")")
+				}
+				
+			}
+
+			return sql.join(" ", [])
+		}
+
+		// const str =  toSql(unionSql2, [])
+		// console.log(str)
+		// 
+		// const str = toHaving(havingBy, [])
+		// console.log(str)
+		const str = toHaving(havingBy2, [])
+		console.log(str)
+
+	</script>
+</head>
+
+<body>
+	
+</body>
+
+</body>
+</html>
