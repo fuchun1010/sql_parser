@@ -380,6 +380,66 @@
 		  ]
 		}
 
+		var andOrSql4 = {
+      "operator": "or",
+      "conditions": [
+        {
+          "id": "1",
+          "nodeType": "condition",
+          "comparisonOperator": "gt",
+          "item": {
+          	"fieldName": "c1",
+          	"fieldType": "number"
+          },
+          "fun": "",
+          "values": {
+            "valueType": "value",
+            "data": [
+              120
+            ]
+          }
+        },
+        {
+        	"id": "2",
+        	"operator": "and",
+        	"nodeType": "group",
+        	"conditions": [
+        		{
+        			"id": "3",
+        			"nodeType": "condition",
+        			"comparisonOperator": "eq",
+        			"item": {
+		          	"fieldName": "c3",
+		          	"fieldType": "number"
+		          },
+		          "fun": "",
+		          "values": {
+	              "valueType": "value",
+	              "data": [
+	                200
+	              ]
+	            }
+        		},{
+        			"id": "4",
+        			"nodeType": "condition",
+        			"comparisonOperator": "eq",
+        			"item": {
+        				"fieldName": "c4",
+		          	"fieldType": "number"
+        			},
+		          "fun": "",
+		          "values": {
+	              "valueType": "value",
+	              "data": [
+	                100
+	              ]
+	            }
+        		}
+        	]
+        }
+      ]
+    }
+
 		var havingBy = {
       "operator": "or",
       "conditions": [
@@ -581,7 +641,7 @@
 						let {comparisonOperator, item:{fieldName}, fun, values:{valueType, data}} = cdt
 						//debugger
 						let {op} = convertComparator(comparisonOperator)
-						let funField = fun ? `${fun}(${fieldName})`: fieldName
+						let funField = (fun && fun.trim().length > 0) ? `${fun}(${fieldName})`: fieldName
 						let isCommonValue = valueType === 'value'
 						c.push(funField)
 						c.push(op)
@@ -598,7 +658,7 @@
 							c.push(" ( ")
 							selectFields = `select ${selectFields ? selectFields.map(field => {
 								let {fun,fieldName} = field
-								return fun ? `${fun}(${fieldName})`: filename
+								return (fun && fun.trim().length > 0) ? `${fun}(${fieldName})`: filename
 							}).join(','): ''} `
 
 							c.push(selectFields)
@@ -672,10 +732,17 @@
 		function toWhere(inputs, sql = []) {
 			//debugger
 			//TODO 代码多个condition有bug
+			debugger
 			const {operator, conditions} = inputs
 			let isUnion = operator === 'union'
 			let len = (Array.isArray(conditions) && conditions.length) || 0
-
+			let prefix = void 0
+			let isAdded = false
+			if(!isUnion) {
+				prefix = operator === 'and' ? `( 1 = 1 ${operator} `: " ( "
+				sql.push(prefix)
+				isAdded = true
+			}
 			for(let i = 0; i < len; i++) {
 				let c = conditions[i]
 				if(isUnion) {
@@ -687,30 +754,34 @@
 					let whereSmt = toWhere({operator, conditions}, [])
 					//debugger
 					sql.push(whereSmt)
-					let groupSmt = ` group by ${groupBy.map(field => field.fieldName).join(',')} `
-					sql.push(groupSmt)
+					let groupSmt = groupBy ?` group by ${groupBy.map(field => field.fieldName).join(',')} `: ''
+					if(groupSmt.trim().length > 0) {
+						sql.push(groupSmt)
+					}
+					
 				}
 				else {
 					//process condition
 					let isNotLast = i != (len - 1)
-					//debugger
-					let {nodeType,comparisonOperator, values:{valueType, data}, item:{fieldType, fieldName}} = c
+					debugger
+					let {nodeType} = c
 					let isCondition = nodeType === 'condition'
-					let prefix = operator === 'and' ? `( 1 = 1 ${operator} `: " ( "
-					sql.push(prefix)
-					let {range, op} = convertComparator(comparisonOperator)
-					let isTextType = fieldType === 'Text'
-					let v = void 0
-					if(range) {
-						v = isTextType ? data.map(d => `'${d}'`): data
-						v = `(${v.join(',')})`
-					}
-					else {
-						v = isTextType ? data.map(d => `'${d}'`).join(''): data.join('')
-					}
-					sql.push(fieldName)
-					sql.push(op)
+					
 					if(isCondition) {
+						// process common condition
+						let {comparisonOperator, values:{valueType, data}, item:{fieldType, fieldName}} = c
+						let {range, op} = convertComparator(comparisonOperator)
+						let isTextType = fieldType === 'Text'
+						let v = void 0
+						if(range) {
+							v = isTextType ? data.map(d => `'${d}'`): data
+							v = `(${v.join(',')})`
+						}
+						else {
+							v = isTextType ? data.map(d => `'${d}'`).join(''): data.join('')
+						}
+						sql.push(fieldName)
+						sql.push(op)
 						sql.push(v)
 						if(isNotLast) {
 							sql.push(operator)
@@ -718,22 +789,32 @@
 					}
 					else {
 						//TODO process group
+						debugger
+						let result = toWhere(c, [])
+						let exists = result && result.length > 0
+						if(exists) {
+							sql.push(result)
+						}
 					}
-					sql.push(")")
+					//sql.push(")")
 				}
 				
 			}
 
-			return sql.join(" ", [])
+			if(isAdded) {
+				sql.push(")")
+			}
+
+			return sql.join(" ")
 		}
 
-		const str =  toWhere(unionSql2, [])
-		console.log(str)
+		// const str =  toWhere(andOrSql4, [])
+		// console.log(str)
 		// 
 		// const str = toHaving(havingBy, [])
 		// console.log(str)
-		// const str = toHaving(havingBy2, [])
-		// console.log(str)
+		const str = toHaving(havingBy2, [])
+		console.log(str)
 
 	</script>
 </head>
