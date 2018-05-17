@@ -164,8 +164,10 @@
 			          "id": "1",
 			          "nodeType": "condition",
 			          "comparisonOperator": "gt",
-			          "fieldName": "c1",
-			          "fieldType": "number",
+			          "item": {
+			          	"fieldName": "c1",
+			          	"fieldType": "number"
+			          },
 			          "fun": "sum",
 			          "values": {
 			            "valueType": "value",
@@ -183,8 +185,10 @@
 			        			"id": "3",
 			        			"nodeType": "condition",
 			        			"comparisonOperator": "eq",
-			        			"fieldName": "c2",
-					          "fieldType": "number",
+			        			"item": {
+					          	"fieldName": "c2",
+					          	"fieldType": "number"
+					          },
 					          "fun": "avg",
 					          "values": {
 				              "valueType": "value",
@@ -195,10 +199,11 @@
 			        		},{
 			        			"id": "4",
 			        			"nodeType": "condition",
-			        			"nodeType": "condition",
 			        			"comparisonOperator": "eq",
-			        			"fieldName": "c2",
-					          "fieldType": "number",
+			        			"item": {
+			        				"fieldName": "c2",
+					          	"fieldType": "number"
+			        			},
 					          "fun": "count",
 					          "values": {
 				              "valueType": "value",
@@ -437,8 +442,10 @@
           "id": "1",
           "nodeType": "condition",
           "comparisonOperator": "gt",
-          "fieldName": "c1",
-          "fieldType": "number",
+          "item": {
+          	"fieldName": "c1",
+          	"fieldType": "number"
+          },
           "fun": "sum",
           "values": {
             "valueType": "value",
@@ -456,8 +463,10 @@
         			"id": "3",
         			"nodeType": "condition",
         			"comparisonOperator": "eq",
-        			"fieldName": "c2",
-		          "fieldType": "number",
+        			"item": {
+		          	"fieldName": "c2",
+		          	"fieldType": "number"
+		          },
 		          "fun": "avg",
 		          "values": {
 	              "valueType": "value",
@@ -466,12 +475,14 @@
 	              ]
 	            }
         		},{
-        			"id": "4",
+        			"id": "3",
         			"nodeType": "condition",
         			"nodeType": "condition",
         			"comparisonOperator": "eq",
-        			"fieldName": "c2",
-		          "fieldType": "number",
+        			"item": {
+        				"fieldName": "c4",
+		          	"fieldType": "number"
+        			},
 		          "fun": "count",
 		          "values": {
 	              "valueType": "value",
@@ -483,9 +494,13 @@
         	]
         },
         {
-        	"id": "3",
+        	"id": "4",
         	"operator": "union",
         	"nodeType": "condition",
+          "item": {
+          	"fieldName": "c4",
+          	"fieldType": "number"
+          },
         	"comparisonOperator": "IN_OPTIONS",
         	"values": {
         		"valueType": "subQuery",
@@ -505,8 +520,10 @@
 			        			"id": "3",
 			        			"nodeType": "condition",
 			        			"comparisonOperator": "eq",
-			        			"fieldName": "c2",
-					          "fieldType": "number",
+			        			"item":{
+			        				"fieldName": "c2",
+					          	"fieldType": "number"
+			        			},
 					          "fun": "avg",
 					          "values": {
 				              "valueType": "value",
@@ -520,8 +537,10 @@
 			        			"nodeType": "condition",
 			        			"nodeType": "condition",
 			        			"comparisonOperator": "eq",
-			        			"fieldName": "c2",
-					          "fieldType": "number",
+			        			"item":{
+			        				"fieldName": "c2",
+					          	"fieldType": "number"
+			        			},
 					          "fun": "count",
 					          "values": {
 				              "valueType": "value",
@@ -559,10 +578,10 @@
 					let {nodeType} = cdt 
 					let isCondition = nodeType === 'condition'
 					if(isCondition) {
-						let {comparisonOperator, fieldName, fun, values:{valueType, data}} = cdt
+						let {comparisonOperator, item:{fieldName}, fun, values:{valueType, data}} = cdt
 						//debugger
 						let {op} = convertComparator(comparisonOperator)
-						let funField = `${fun}(${fieldName})`
+						let funField = fun ? `${fun}(${fieldName})`: fieldName
 						let isCommonValue = valueType === 'value'
 						c.push(funField)
 						c.push(op)
@@ -575,21 +594,42 @@
 						}
 						else {
 							//TODO subQuery
-							debugger
+							let {selectFields, fromTable, operator, conditions, groupBy, havingBy} = data[0]
+							c.push(" ( ")
+							selectFields = `select ${selectFields ? selectFields.map(field => {
+								let {fun,fieldName} = field
+								return fun ? `${fun}(${fieldName})`: filename
+							}).join(','): ''} `
+
+							c.push(selectFields)
+							fromTable = ` from ${fromTable} `
+							c.push(fromTable)
+							let where = toSql({operator, conditions}, [])
+							groupBy = groupBy ? ` group by ${groupBy.map(g => g.fieldName).join(',')} `:''
+							havingBy = havingBy ? ` having ${havingBy.map(h => h.fieldName).join(',')}`: ''
+							c.push(` where ${where}`)
+							if(groupBy.trim().length > 0) {
+								c.push(groupBy)
+							}
+							
+							if(havingBy.trim().length > 0) {
+								c.push(havingBy)
+							}
+							c.push(" ) ")
 						}
 
 					}
 					else {
 						//process group
 						let result = convertHaving(cdt, [])
-						debugger
+						//debugger
 						c.push(result)
 					}
 				}
 				c.push(')')
 				return c.join(' ')
 			}
-			const str = convertHaving(havingBy, [])
+			const str = convertHaving(having, [])
 			return `having ${str}`
 		}
 		
@@ -630,7 +670,7 @@
 		}
 
 		function toSql(inputs, sql = []) {
-			debugger
+			//debugger
 			const {operator, conditions} = inputs
 			let isUnion = operator === 'union'
 			let len = (Array.isArray(conditions) && conditions.length) || 0
@@ -643,7 +683,7 @@
 					let fromSmt = ` from ${fromTable} where `
 					sql.push(fromSmt)
 					let whereSmt = toSql({operator, conditions}, [])
-					debugger
+					//debugger
 					sql.push(whereSmt)
 					let groupSmt = ` group by ${groupBy.map(field => field.fieldName).join(',')} `
 					sql.push(groupSmt)
@@ -651,6 +691,7 @@
 				else {
 					//process condition
 					let isNotLast = i != (len - 1)
+					//debugger
 					let {nodeType,comparisonOperator, values:{valueType, data}, item:{fieldType, fieldName}} = c
 					let isCondition = nodeType === 'condition'
 					let prefix = operator === 'and' ? `( 1 = 1 ${operator} `: " ( "
@@ -684,13 +725,13 @@
 			return sql.join(" ", [])
 		}
 
-		// const str =  toSql(unionSql2, [])
-		// console.log(str)
+		const str =  toSql(unionSql2, [])
+		console.log(str)
 		// 
 		// const str = toHaving(havingBy, [])
 		// console.log(str)
-		const str = toHaving(havingBy2, [])
-		console.log(str)
+		// const str = toHaving(havingBy2, [])
+		// console.log(str)
 
 	</script>
 </head>
