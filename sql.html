@@ -1103,9 +1103,7 @@
 							sql.push(fieldName)
 							sql.push(op)
 							sql.push(v)
-							if(isNotLast) {
-								sql.push(operator)
-							}
+							
 						}
 						else {
 							// TODO process subQuery
@@ -1113,8 +1111,12 @@
 							let rs = convertSubQuery(c.values.data, [])
 							sql.push(rs)
 							debugger
+
 						}
 
+						if(isNotLast) {
+							sql.push(operator)
+						}
 						
 					}
 					else {
