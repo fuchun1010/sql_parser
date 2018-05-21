@@ -140,7 +140,7 @@
 		              "comparisonOperator": "eq",
 		              "values": {
 		                "valueType": "value",
-		                "data": 3
+		                "data": [4]
 		              },
 		              "item": {
 		                "fieldType": "Numeric",
@@ -868,6 +868,7 @@
     function convertSubQuery(record, c = []) {
     	debugger
 			let {operator, conditions} = record
+			//TODO 这个or有时候是需要添加的
 			let prefix = operator === 'or' ? `(`: `(1 = 1 and `
 			c.push(prefix)
 			let len = (Array.isArray(conditions) && conditions.length) || 0
@@ -1110,6 +1111,7 @@
 							// TODO process subQuery
 							debugger
 							let rs = convertSubQuery(c.values.data, [])
+							sql.push(rs)
 							debugger
 						}
 
