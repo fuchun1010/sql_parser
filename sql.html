@@ -155,7 +155,7 @@
 		          "fieldName": "c3"
 		        }
 		      ],
-		      "havingBy": {
+		      "hiveBy": {
 			      "operator": "or",
 			      "conditions": [
 			        {
@@ -258,7 +258,7 @@
 		          "fieldName": "c3"
 		        }
 		      ],
-		      "havingBy": {
+		      "hiveBy": {
 			      "operator": "or",
 			      "conditions": [
 			        {
@@ -438,21 +438,23 @@
       ]
     }
 
-		var havingBy = {
+		var hiveBy = {
       "operator": "or",
       "conditions": [
         {
           "id": "1",
           "nodeType": "condition",
           "comparisonOperator": "gt",
-          "fieldName": "c1",
-          "fieldType": "number",
           "fun": "sum",
           "values": {
             "valueType": "value",
             "data": [
               120
             ]
+          },
+          "item": {
+            "fieldName": "c1",
+            "fieldType": "number"
           }
         },
         {
@@ -464,8 +466,10 @@
         			"id": "3",
         			"nodeType": "condition",
         			"comparisonOperator": "eq",
-        			"fieldName": "c2",
-		          "fieldType": "number",
+        			"item": {
+		            "fieldName": "c1",
+		            "fieldType": "number"
+		          },
 		          "fun": "avg",
 		          "values": {
 	              "valueType": "value",
@@ -478,8 +482,10 @@
         			"nodeType": "condition",
         			"nodeType": "condition",
         			"comparisonOperator": "eq",
-        			"fieldName": "c2",
-		          "fieldType": "number",
+        			"item": {
+		            "fieldName": "c2",
+		            "fieldType": "number"
+		          },
 		          "fun": "count",
 		          "values": {
 	              "valueType": "value",
@@ -757,9 +763,10 @@
 		              "id": "04839167-db37-4be0-92cf-3236291821ff",
 		              "nodeType": "condition",
 		              "comparisonOperator": "gt",
-		              "values": [
-		                "3000"
-		              ],
+		              "values": {
+		              	"valueType": "value",
+		              	"data":[3000]
+		              },
 		              "item": {
 		                "fieldType": "Numeric",
 		                "fieldName": "sales"
@@ -769,9 +776,10 @@
 		              "id": "bf8ba526-9ed5-49eb-b0f4-e8f73093892e",
 		              "nodeType": "condition",
 		              "comparisonOperator": "eq",
-		              "values": [
-		                "3"
-		              ],
+		              "values": {
+		              	"valueType": "value",
+		              	"data":[3]
+		              },
 		              "item": {
 		                "fieldType": "Numeric",
 		                "fieldName": "id"
@@ -785,7 +793,7 @@
 		          "fieldName": "c3"
 		        }
 		      ],
-		      "havingBy": {
+		      "hiveBy": {
 			      "operator": "or",
 			      "conditions": [
 			        {
@@ -897,7 +905,7 @@
 					else {
 						//TODO subQuery
 						debugger
-						let {selectFields, fromTable, operator, conditions, groupBy, havingBy} = values.data
+						let {selectFields, fromTable, operator, conditions, groupBy, hiveBy} = values.data
 						//c.push(operator)
 						funField = (fun && fun.trim().length > 0) ? `${fun}(${item.fieldName})`: item.fieldName
 						debugger
@@ -914,14 +922,14 @@
 						c.push(fromTable)
 						let where = toWhere({operator, conditions}, [])
 						groupBy = groupBy ? ` group by ${groupBy.map(g => g.fieldName).join(',')} `:''
-						havingBy = havingBy ? ` having ${havingBy.map(h => h.fieldName).join(',')}`: ''
+						hiveBy = hiveBy ? ` having ${hiveBy.map(h => h.fieldName).join(',')}`: ''
 						c.push(` where ${where}`)
 						if(groupBy.trim().length > 0) {
 							c.push(groupBy)
 						}
 						
-						if(havingBy.trim().length > 0) {
-							c.push(havingBy)
+						if(hiveBy.trim().length > 0) {
+							c.push(hiveBy)
 						}
 						c.push(" ) ")
 					}
@@ -954,6 +962,7 @@
 					let {nodeType} = cdt 
 					let isCondition = nodeType === 'condition'
 					if(isCondition) {
+						debugger
 						let {comparisonOperator, item:{fieldName}, fun, values:{valueType, data}} = cdt
 						//debugger
 						let {op} = convertComparator(comparisonOperator)
@@ -971,7 +980,7 @@
 						}
 						else {
 							//TODO subQuery
-							let {selectFields, fromTable, operator, conditions, groupBy, havingBy} = data[0]
+							let {selectFields, fromTable, operator, conditions, groupBy, hiveBy} = data[0]
 							c.push(operator)
 							c.push(funField)
 							c.push(op)
@@ -986,14 +995,14 @@
 							c.push(fromTable)
 							let where = toWhere({operator, conditions}, [])
 							groupBy = groupBy ? ` group by ${groupBy.map(g => g.fieldName).join(',')} `:''
-							havingBy = havingBy ? ` having ${havingBy.map(h => h.fieldName).join(',')}`: ''
+							hiveBy = hiveBy ? ` having ${hiveBy.map(h => h.fieldName).join(',')}`: ''
 							c.push(` where ${where}`)
 							if(groupBy.trim().length > 0) {
 								c.push(groupBy)
 							}
 							
-							if(havingBy.trim().length > 0) {
-								c.push(havingBy)
+							if(hiveBy.trim().length > 0) {
+								c.push(hiveBy)
 							}
 							c.push(" ) ")
 						}
@@ -1010,6 +1019,7 @@
 				return c.join(' ')
 			}
 			const str = convertHaving(having, [])
+			debugger
 			return `having ${str}`
 		}
 		
@@ -1170,16 +1180,16 @@
 			if(!isValidate) {
 				return ''
 			}
-			let result = groupBy.map(g => g.fieldName)
-			return result
+			let result = groupBy.map(g => g.fieldName).join(',')
+			return `group by ${result}`
 		}
 
 		function toHive(hiveBy) {
-			let isValidate = Array.isArray(hivingBy) && hivingBy.length > 0
+			let isValidate = Array.isArray(hiveBy) && hiveBy.length > 0
 			if(!isValidate) {
 				return ''
 			}
-			let result = toHaving(having, [])
+			let result = toHaving(hiveBy, [])
 			return result
 		}
 
@@ -1191,7 +1201,7 @@
 			let tableSmt = toTable(dataSetId)
 			let whereSmt = toWhere({operator, conditions}, [])
 			let groupSmt = toGroupSmt(groupBy)
-			let hiveSmt = toHive(hivingBy)
+			let hiveSmt = toHive(hiveBy)
 			let sqlSmt = []
 			sqlSmt.push(selectSmt)
 			sqlSmt.push(tableSmt)
@@ -1208,15 +1218,16 @@
 			return sqlSmt.join(' ')
 		}
 
-		const str =  toWhere(unionSql, [])
-		console.log(str)
+		// const str =  toWhere(unionSql, [])
+		// console.log(str)
 		// 
-		// const str = toHaving(havingBy, [])
+		// const str = toHaving(hiveBy, [])
 		// console.log(str)
 		// const str = toHaving(havingBy2, [])
 		// console.log(str)
-		// const sql = toSql(entireSql1)
-		// console.log(sql)
+		//TODO entrireSql1有点问题
+		const sql = toSql(entireSql1)
+		console.log(sql)
 
 	</script>
 </head>
