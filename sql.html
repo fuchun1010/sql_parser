@@ -194,6 +194,102 @@
       ]
     }
 
+    var whereConditionWithSubquery = {
+    	"operator": "and",
+      "conditions": [
+        {
+          "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+          "nodeType": "condition",
+          "comparisonOperator": "IN_OPTIONS",
+          "values": {
+            "valueType": "value",
+            "data": [
+              "BJ"
+            ]
+          },
+          "item": {
+            "fieldName": "location",
+            "fieldType": "Text"
+          }
+        },
+        {
+          "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+          "nodeType": "condition",
+          "comparisonOperator": "IN_OPTIONS",
+          "values": {
+            "valueType": "subQuery",
+            "data": {
+              "selectFields": [
+                {
+                  "fieldName": "m1",
+                  "fieldType": "number",
+                  "fun": "sum"
+                }
+              ],
+              "fromTable": "t2",
+              "operator": "and",
+              "conditions": [
+                {
+                  "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+                  "nodeType": "condition",
+                  "comparisonOperator": "eq",
+                  "values": {
+                    "valueType": "value",
+                    "data": [
+                      3
+                    ]
+                  },
+                  "item": {
+                    "fieldName": "c1",
+                    "fieldType": "number"
+                  }
+                },
+                {
+                  "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+                  "nodeType": "condition",
+                  "comparisonOperator": "eq",
+                  "values": {
+                    "valueType": "subQuery",
+                    "data": {
+                      "selectFields": [
+                        {
+                          "fieldName": "m2",
+                          "fieldType": "number"
+                        }
+                      ],
+                      "fromTable": "t3",
+                      "operator": "and",
+                        "conditions": [
+                          {
+                            "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+                            "nodeType": "condition",
+                            "comparisonOperator": "eq",
+                            "values": {
+                              "valueType": "value",
+                              "data": [
+                                3
+                              ]
+                            },
+                            "item": {
+                              "fieldName": "c5",
+                              "fieldType": "number"
+                            }
+                          }
+                       ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "item": {
+            "fieldName": "location",
+            "fieldType": "Text"
+          }
+        }
+      ]
+    }
+
 		var unionSql2 = {
 		  "operator": "union",
 		  "conditions": [
@@ -850,12 +946,16 @@
 
 
     function convertSubQuery(record, c = []) {
-    	//debugger
+    	debugger
 			let {operator, conditions} = record
 			//TODO 这个or有时候是需要添加的
 			let prefix = operator === 'or' ? `(`: `(1 = 1 and `
 			c.push(prefix)
 			let len = (Array.isArray(conditions) && conditions.length) || 0
+			if(len === 0) {
+				return ""
+			}
+			//debugger
 			for(let i = 0; i < len; i++) {
 				let cdt = conditions[i]
 				let {nodeType} = cdt 
@@ -883,29 +983,29 @@
 						//debugger
 						let {selectFields, fromTable, operator, conditions, groupBy, hiveBy} = values.data
 						//c.push(operator)
-						funField = (fun && fun.trim().length > 0) ? `${fun}(${item.fieldName})`: item.fieldName
+						//funField = (fun && fun.trim().length > 0) ? `${fun}(${item.fieldName})`: item.fieldName
+						funField = selectFields.map(({fieldName, fun}) => (fun && fun.trim().length > 0) ? `${fun}(${fieldName})`: fieldName).join(" ")
 						//debugger
 						c.push(funField)
 						c.push(op)
 						c.push(" ( ")
-						selectFields = `select ${selectFields ? selectFields.map(field => {
-							let {fun,fieldName} = field
-							return (fun && fun.trim().length > 0) ? `${fun}(${fieldName})`: fieldName
-						}).join(','): ''} `
-
+						selectFields = toSelectSmt(selectFields)
 						c.push(selectFields)
-						fromTable = ` from ${fromTable} `
+						fromTable = toTable(fromTable)
 						c.push(fromTable)
 						let where = toWhere({operator, conditions}, [])
-						groupBy = groupBy ? ` group by ${groupBy.map(g => g.fieldName).join(',')} `:''
-						hiveBy = hiveBy ? ` having ${hiveBy.map(h => h.fieldName).join(',')}`: ''
-						c.push(` where ${where}`)
-						if(groupBy.trim().length > 0) {
-							c.push(groupBy)
+						groupBy = toGroupSmt(groupBy)
+						hiveBy = toHive(hiveBy)
+						if(where.length > 0) {
+							c.push(` where ${where}`)
 						}
 						
-						if(hiveBy.trim().length > 0) {
-							c.push(hiveBy)
+						if(groupBy.length > 0) {
+							c.push(groupBy.join(" "))
+						}
+						
+						if(hiveBy.length > 0) {
+							c.push(hiveBy.join(" "))
 						}
 						c.push(" ) ")
 					}
@@ -1236,15 +1336,21 @@
 
 		// const str =  toWhere(unionSql, [])
 		// console.log(str)
-		// 
+		 
 		// const str = toHaving(hiveBy, [])
 		// console.log(str)
+		 
 		// const str = toHaving(havingBy2, [])
 		// console.log(str)
-		//TODO entrireSql1有点问题
+		
 		// const sql = toEntireSql(entireSql1)
 		// console.log(sql)
-		const str = toWhere(commonWhereWithOutSubquery)
+		 
+		// const str = toWhere(commonWhereWithOutSubquery)
+		// console.log(str)
+		
+		//TODO 有bug
+		const str = toWhere(whereConditionWithSubquery)
 		console.log(str)
 
 	</script>
