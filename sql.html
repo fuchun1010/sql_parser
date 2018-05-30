@@ -6,23 +6,7 @@
 	<script type="text/javascript">
 		
 		var unionSql = {
-		  "operator": "union",
-		  "conditions": [
-		    {
-		      "selectFields": [
-		        {
-		          "fieldName": "c1",
-		          "fieldType": "number",
-		          "fun": ""
-		        },
-		        {
-		          "fieldName": "c2",
-		          "fieldType": "number",
-		          "fun": ""
-		        }
-		      ],
-		      "fromTable": "t1",
-		      "operator": "and",
+		  "operator": "and",
 		      "conditions": [
 		        {
 		          "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
@@ -149,74 +133,66 @@
 		            }
 		          ]
 		        }
-		      ],
-		      "groupBy": [
-		        {
-		          "fieldName": "c3"
-		        }
-		      ],
-		      "hiveBy": {
-			      "operator": "or",
-			      "conditions": [
-			        {
-			          "id": "1",
-			          "nodeType": "condition",
-			          "comparisonOperator": "gt",
-			          "item": {
-			          	"fieldName": "c1",
-			          	"fieldType": "number"
-			          },
-			          "fun": "sum",
-			          "values": {
-			            "valueType": "value",
-			            "data": [
-			              120
-			            ]
-			          }
-			        },
-			        {
-			        	"id": "2",
-			        	"operator": "and",
-			        	"nodeType": "group",
-			        	"conditions": [
-			        		{
-			        			"id": "3",
-			        			"nodeType": "condition",
-			        			"comparisonOperator": "eq",
-			        			"item": {
-					          	"fieldName": "c2",
-					          	"fieldType": "number"
-					          },
-					          "fun": "avg",
-					          "values": {
-				              "valueType": "value",
-				              "data": [
-				                200
-				              ]
-				            }
-			        		},{
-			        			"id": "4",
-			        			"nodeType": "condition",
-			        			"comparisonOperator": "eq",
-			        			"item": {
-			        				"fieldName": "c2",
-					          	"fieldType": "number"
-			        			},
-					          "fun": "count",
-					          "values": {
-				              "valueType": "value",
-				              "data": [
-				                100
-				              ]
-				            }
-			        		}
-			        	]
-			        }
-			      ]
-			    }
-		    }
-		  ]
+		      ]
 		}
+
+		var commonWhereWithOutSubquery = {
+			"operator": "and",
+      "conditions": [
+        {
+          "id": "e8a19125-bbac-4b1b-b69f-bfdce7233718",
+          "nodeType": "condition",
+          "comparisonOperator": "IN_OPTIONS",
+          "values": {
+            "valueType": "value",
+            "data": [
+              "BJ"
+            ]
+          },
+          "item": {
+            "fieldName": "location",
+            "fieldType": "Text"
+          }
+        },
+        {
+          "nodeType": "group",
+          "operator": "or",
+          "id": "7b17487d-e274-498b-b7b5-c847854c3376",
+          "conditions": [
+            {
+              "id": "04839167-db37-4be0-92cf-3236291821ff",
+              "nodeType": "condition",
+              "comparisonOperator": "gt",
+              "values": {
+                "valueType": "value",
+                "data": [
+                  3000
+                ]
+              },
+              "item": {
+                "fieldType": "Numeric",
+                "fieldName": "sales"
+              }
+            },
+            {
+              "id": "bf8ba526-9ed5-49eb-b0f4-e8f73093892e",
+              "nodeType": "condition",
+              "comparisonOperator": "eq",
+              "values": {
+                "valueType": "value",
+                "data": [
+                  3
+                ]
+              },
+              "item": {
+                "fieldType": "Numeric",
+                "fieldName": "id"
+              }
+            }
+          ]
+        }
+      ]
+    }
 
 		var unionSql2 = {
 		  "operator": "union",
@@ -632,7 +608,7 @@
 		  "tagLevelId": "xxxxx",
 		  "count": 0,
 		  "name": "一个测试标签",
-		  "dataSetId": 122,
+		  "fromTable": 122,
 		  "selectFields":[
 		    {
 		      "fieldName": "c1",
@@ -874,7 +850,7 @@
 
 
     function convertSubQuery(record, c = []) {
-    	debugger
+    	//debugger
 			let {operator, conditions} = record
 			//TODO 这个or有时候是需要添加的
 			let prefix = operator === 'or' ? `(`: `(1 = 1 and `
@@ -884,10 +860,10 @@
 				let cdt = conditions[i]
 				let {nodeType} = cdt 
 				let isCondition = nodeType === 'condition'
-				debugger
+				//debugger
 				if(isCondition) {
 					let {comparisonOperator, item, fun, values} = cdt
-					debugger
+					//debugger
 					let {op} = convertComparator(comparisonOperator)
 					let funField = void 0
 					let isCommonValue = cdt.values.valueType === 'value'
@@ -904,11 +880,11 @@
 					}
 					else {
 						//TODO subQuery
-						debugger
+						//debugger
 						let {selectFields, fromTable, operator, conditions, groupBy, hiveBy} = values.data
 						//c.push(operator)
 						funField = (fun && fun.trim().length > 0) ? `${fun}(${item.fieldName})`: item.fieldName
-						debugger
+						//debugger
 						c.push(funField)
 						c.push(op)
 						c.push(" ( ")
@@ -962,7 +938,7 @@
 					let {nodeType} = cdt 
 					let isCondition = nodeType === 'condition'
 					if(isCondition) {
-						debugger
+						//debugger
 						let {comparisonOperator, item:{fieldName}, fun, values:{valueType, data}} = cdt
 						//debugger
 						let {op} = convertComparator(comparisonOperator)
@@ -1019,7 +995,7 @@
 				return c.join(' ')
 			}
 			const str = convertHaving(having, [])
-			debugger
+			//debugger
 			return `having ${str}`
 		}
 		
@@ -1060,7 +1036,7 @@
 		}
 
 		function toWhere(inputs, sql = []) {
-			//debugger
+			debugger
 			const {operator, conditions} = inputs
 			let isUnion = operator === 'union'
 			let len = (Array.isArray(conditions) && conditions.length) || 0
@@ -1080,7 +1056,7 @@
 					let fromSmt = ` from ${fromTable} where `
 					sql.push(fromSmt)
 					let whereSmt = toWhere({operator, conditions}, [])
-					//debugger
+					debugger
 					sql.push(whereSmt)
 					let groupSmt = groupBy ?` group by ${groupBy.map(field => field.fieldName).join(',')} `: ''
 					if(groupSmt.trim().length > 0) {
@@ -1090,13 +1066,13 @@
 				else {
 					//process condition
 					let isNotLast = i != (len - 1)
-					//debugger
+					debugger
 					let {nodeType} = c
 					let isCondition = nodeType === 'condition'
 					
 					if(isCondition) {
 						// process common condition
-						//debugger
+						debugger
 						let isCommonConidtion = c.values.valueType === 'value'
 						if(isCommonConidtion) {
 							let {comparisonOperator, values:{valueType, data}, item:{fieldType, fieldName}} = c
@@ -1120,7 +1096,7 @@
 							debugger
 							let rs = convertSubQuery(c.values.data, [])
 							sql.push(rs)
-							debugger
+							//debugger
 
 						}
 
@@ -1167,11 +1143,11 @@
 			return `select ${result} `
 		}
 
-		function toTable(dataSetId) {
-			if(!dataSetId) {
-				throw  new Error('dataSetId不允许是空值')
+		function toTable(fromTable) {
+			if(!fromTable) {
+				throw  new Error('fromTable不允许是空值')
 			}
-			let result = `from ${dataSetId} `
+			let result = `from ${fromTable} `
 			return result
 		}
 
@@ -1193,29 +1169,69 @@
 			return result
 		}
 
+		function toEntireSql(inputSql) {
+			function composeSql(operator, conditions, splinter = []) {
+				debugger
+				if(operator === 'union') {
+					for(let c of conditions) {
+						splinter.push('union')
+						splinter.push('(')
+						debugger
+						let {selectFields, operator, conditions, fromTable, groupBy, hiveBy} = c
+						//解析sql各个部分
+						let selectSmt = toSelectSmt(selectFields)
+						let tableSmt = toTable(fromTable)
+						let whereSmt = toWhere({operator, conditions}, [])
+						let groupSmt = toGroupSmt(groupBy)
+						let hiveSmt = toHive(hiveBy)
 
-		function toSql(inputSql) {
-			let {selectFields, operator, conditions, dataSetId, groupBy, hiveBy} = inputSql
+						splinter.push(selectSmt)
+						splinter.push(tableSmt)
+						splinter.push(whereSmt)
+						splinter.push(groupSmt)
+						splinter.push(hiveSmt)
+
+						debugger
+						let tmpSql = composeSql(operator,conditions,[])
+						debugger
+						splinter.push(')')
+						tmpSql = splinter.join(" ")
+						debugger
+						sqlSmt.push(tmpSql)
+						
+						debugger
+					}
+				}
+
+				debugger				
+				return splinter
+			}
+
 			debugger
-			let selectSmt = toSelectSmt(selectFields)
-			let tableSmt = toTable(dataSetId)
-			let whereSmt = toWhere({operator, conditions}, [])
-			let groupSmt = toGroupSmt(groupBy)
-			let hiveSmt = toHive(hiveBy)
 			let sqlSmt = []
+
+			let {selectFields, operator, conditions, fromTable, groupBy, hiveBy} = inputSql
+
+			let selectSmt = toSelectSmt(selectFields)
 			sqlSmt.push(selectSmt)
+			let tableSmt = toTable(fromTable)
 			sqlSmt.push(tableSmt)
-			if(whereSmt && whereSmt.trim().length > 0) {
+			
+			//TODO 这个地方需要递归判断是否有union
+			if(operator === 'union') {
+				composeSql(operator, conditions, [])
+			}
+			else {
+				let whereSmt = toWhere({operator, conditions}, [])
 				sqlSmt.push(whereSmt)
 			}
-			
-			if(groupSmt && groupSmt.trim().length > 0) {
-				sqlSmt.push(groupSmt)
-			}
-			if(hiveSmt && hiveSmt.trim().length > 0) {
-				sqlSmt.push(hiveSmt)
-			}
-			return sqlSmt.join(' ')
+			let groupSmt = toGroupSmt(groupBy)
+			let hiveSmt = toHive(hiveBy)
+			//添加sql的片段
+			sqlSmt.push(groupSmt)
+			sqlSmt.push(hiveSmt)
+
+			return sqlSmt.join(" ")
 		}
 
 		// const str =  toWhere(unionSql, [])
@@ -1226,8 +1242,10 @@
 		// const str = toHaving(havingBy2, [])
 		// console.log(str)
 		//TODO entrireSql1有点问题
-		const sql = toSql(entireSql1)
-		console.log(sql)
+		// const sql = toEntireSql(entireSql1)
+		// console.log(sql)
+		const str = toWhere(commonWhereWithOutSubquery)
+		console.log(str)
 
 	</script>
 </head>
