@@ -944,7 +944,6 @@
 		  "createDate": 1522302048038
     }
 
-
     function convertSubQuery(record, c = []) {
     	debugger
 			let {operator, conditions} = record
@@ -1028,75 +1027,13 @@
 		 * @return {[type]}        [description]
 		 */
 		function toHaving(having, c = []) {
-			function convertHaving(having, c = []) {
-				let {operator, conditions} = having
-				let prefix = operator === 'or' ? `(`: `(1 = 1 and `
-				c.push(prefix)
-				let len = (Array.isArray(conditions) && conditions.length) || 0
-				for(let i = 0; i < len; i++) {
-					let cdt = conditions[i]
-					let {nodeType} = cdt 
-					let isCondition = nodeType === 'condition'
-					if(isCondition) {
-						//debugger
-						let {comparisonOperator, item:{fieldName}, fun, values:{valueType, data}} = cdt
-						//debugger
-						let {op} = convertComparator(comparisonOperator)
-						let funField = (fun && fun.trim().length > 0) ? `${fun}(${fieldName})`: fieldName
-						let isCommonValue = valueType === 'value'
-						
-						if(isCommonValue) {
-							c.push(funField)
-							c.push(op)
-							c.push(data.join(''))
-							let isAddedAnd = i != (len - 1)
-							if(isAddedAnd) {
-								c.push(operator)
-							}
-						}
-						else {
-							//TODO subQuery
-							let {selectFields, fromTable, operator, conditions, groupBy, hiveBy} = data[0]
-							c.push(operator)
-							c.push(funField)
-							c.push(op)
-							c.push(" ( ")
-							selectFields = `select ${selectFields ? selectFields.map(field => {
-								let {fun,fieldName} = field
-								return (fun && fun.trim().length > 0) ? `${fun}(${fieldName})`: filename
-							}).join(','): ''} `
-
-							c.push(selectFields)
-							fromTable = ` from ${fromTable} `
-							c.push(fromTable)
-							let where = toWhere({operator, conditions}, [])
-							groupBy = groupBy ? ` group by ${groupBy.map(g => g.fieldName).join(',')} `:''
-							hiveBy = hiveBy ? ` having ${hiveBy.map(h => h.fieldName).join(',')}`: ''
-							c.push(` where ${where}`)
-							if(groupBy.trim().length > 0) {
-								c.push(groupBy)
-							}
-							
-							if(hiveBy.trim().length > 0) {
-								c.push(hiveBy)
-							}
-							c.push(" ) ")
-						}
-
-					}
-					else {
-						//process group
-						let result = convertHaving(cdt, [])
-						//debugger
-						c.push(result)
-					}
-				}
-				c.push(')')
-				return c.join(' ')
+			const str = convertSubQuery(having, [])
+			if(str.length > 0) {
+				return `having ${str}`
 			}
-			const str = convertHaving(having, [])
-			//debugger
-			return `having ${str}`
+			else {
+				return ''
+			}
 		}
 		
 		/**
@@ -1337,6 +1274,7 @@
 		// const str =  toWhere(unionSql, [])
 		// console.log(str)
 		 
+		//having ( sum(c1) > 120 or (1 = 1 and  avg(c1) = 200 and count(c2) = 100 ) )
 		// const str = toHaving(hiveBy, [])
 		// console.log(str)
 		 
@@ -1349,9 +1287,9 @@
 		// const str = toWhere(commonWhereWithOutSubquery)
 		// console.log(str)
 		
-		//TODO 
-		const str = toWhere(whereConditionWithSubquery)
-		console.log(str)
+
+		// const str = toWhere(whereConditionWithSubquery)
+		// console.log(str)
 
 	</script>
 </head>
