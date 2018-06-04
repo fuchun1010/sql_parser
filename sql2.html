@@ -65,9 +65,10 @@
 		          "hiveBy": [
 		            {
 		              "fieldName": "x1",
-		              "fun": "sum/max/avg",
-		              "opt": "gt/eq/gte/le/lte",
-		              "values": 200
+		              "fieldType": "number"
+		              "fun": "sum",
+		              "opt": "gt",
+		              "values": [200]
 		            }
 		          ]
 		        }
@@ -162,7 +163,7 @@
 			return obj[key]
 		}
 
-		function convertValue(fieldType,range, values) {
+		function convertValue(fieldType, range, values) {
 			
 			let isTextType = fieldType.toLowerCase() === 'Text'
 			let v = void 0
@@ -175,7 +176,6 @@
 			}
 			return v
 		}
-
 
 		function toSelectFields(fields) {
 			const isExistedSelectFields = fields && Array.isArray(fields) && fields.length > 0
@@ -291,12 +291,32 @@
 			return rs
 		}
 
-		function toGroup() {
-
+		function toGroup(g) {
+			if(!g) {
+				return ""
+			}
+			let group = ["group by"]
+			let d = g.map(d => d.fieldName).join(",")
+			group.push(d)
+			return  group.join(" ")
 		}
 
-		function toHive() {
+		function toHive(h) {
+			if(!h) {
+				return ""
+			}
+			let hive = ["having"]
+			let h = g.map(d => {
+				let {fieldName, fun, opt, values, fieldType} = d
+				let {range, op} = convertComparator(opt)
+				let v = convertValue(fieldType, range, values)
+				let rs = fun && fun.trim().length > 0 ? `${fun}(${fieldName}) ${op} ${v}`:`${fieldName} ${op} ${v}`
+				return rs
+			}).join("and")
+			
+			hive.push(h)
 
+			return hive.join(" ")
 		}
 
 		function toSql(smt) {
