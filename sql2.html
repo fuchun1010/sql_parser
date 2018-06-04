@@ -163,7 +163,7 @@
 		}
 
 		function convertValue(fieldType,range, values) {
-			debugger
+			
 			let isTextType = fieldType.toLowerCase() === 'Text'
 			let v = void 0
 			if(range) {
@@ -223,15 +223,9 @@
 					let isSubQuery = c.nodeType === 'group'
 
 					if(isSubQuery) {
-						let smt = ["("]
 						//debugger
-						let response =  parse(c.conditions, smt)
-						//debugger
-						//TODO exists groupBy, add
-						//TODO exists hibeBy, add
-						smt.join(")")
+						let response =  parse(c.conditions, [])
 						tmp.push(response)
-						
 					}
 					else {
 						let {item:{fieldName,fieldType}, comparisonOperator,selectFields, fromTable, nodeType,  groupBy, hiveBy, values } = c
@@ -249,9 +243,9 @@
 
 							if(nodeType === 'group') {
 								let smt = ["("]
-								//debugger
+								debugger
 								let response =  parse(c.conditions, smt)
-								//debugger
+								debugger
 								//TODO exists groupBy, add
 								//TODO exists hibeBy, add
 								smt.join(")")
