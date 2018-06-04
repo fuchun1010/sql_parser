@@ -65,7 +65,7 @@
 		          "hiveBy": [
 		            {
 		              "fieldName": "x1",
-		              "fieldType": "number"
+		              "fieldType": "number",
 		              "fun": "sum",
 		              "opt": "gt",
 		              "values": [200]
@@ -264,6 +264,10 @@
 								
 							}
 
+							tmp.push(toGroup(groupBy))
+
+							tmp.push(toHive(hiveBy))
+
 							tmp.push(")")
 						}
 						else {
@@ -295,7 +299,7 @@
 			if(!g) {
 				return ""
 			}
-			let group = ["group by"]
+			let group = [" group by "]
 			let d = g.map(d => d.fieldName).join(",")
 			group.push(d)
 			return  group.join(" ")
@@ -306,7 +310,7 @@
 				return ""
 			}
 			let hive = ["having"]
-			let h = g.map(d => {
+			let rs = h.map(d => {
 				let {fieldName, fun, opt, values, fieldType} = d
 				let {range, op} = convertComparator(opt)
 				let v = convertValue(fieldType, range, values)
@@ -314,7 +318,7 @@
 				return rs
 			}).join("and")
 			
-			hive.push(h)
+			hive.push(rs)
 
 			return hive.join(" ")
 		}
