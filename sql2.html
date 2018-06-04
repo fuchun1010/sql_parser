@@ -231,13 +231,7 @@
 						//TODO exists hibeBy, add
 						smt.join(")")
 						tmp.push(response)
-						//TODO 可能要补and
-						if(i != len - 1) {
-							let op = c.operator === 'and' ? "and": ""
-							if(op.trim().length > 0) {
-								tmp.push(op)
-							}
-						}
+						
 					}
 					else {
 						let {item:{fieldName,fieldType}, comparisonOperator,selectFields, fromTable, nodeType,  groupBy, hiveBy, values } = c
@@ -282,6 +276,14 @@
 							//debugger
 							let v = convertValue(fieldType, range, values)
 							tmp.push(v)
+						}
+					}
+
+					//最后还要条条件需要补operator
+					if(i != len - 1) {
+						let op = c.operator === 'and' ? "and": ""
+						if(op.trim().length > 0) {
+							tmp.push(op)
 						}
 					}
 				}
