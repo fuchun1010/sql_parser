@@ -336,6 +336,10 @@
 			let whereSmt = toWhere(conditions)
 			rs.push(whereSmt)
 
+			rs.push(toGroup(groupBy))
+
+			rs.push(toHive(hiveBy))
+
 			return rs.length > 0 ? rs.join(" "): ""
 		}
 
