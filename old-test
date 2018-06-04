@@ -1,0 +1,15 @@
+curl -XPOST "http://localhost:8080/sqltag/preview" -H "Content-Type:application/json" -d '{
+	"id": "123",
+	"sql": "select 1 from t1"
+}'
+
+
+
+curl -XPOST "http://localhost:8080/preview/tag" -H "Content-Type:application/json" -d '{"selectFields":[{"fieldName":"member_id","fieldType":"text","fun":""},{"fieldName":"phone_num","fieldType":"text","fun":""},{"fieldName":"wx_open_id","fieldType":"text","fun":""}],"count":7884,"executeStatus":"wait","tagLevelId":"5ae40f73821e69346071fca8","groupBy":[{"fieldName":"member_id"},{"fieldName":"phone_num"},{"fieldName":"wx_open_id"}],"isActive":true,"divedGroups":{"split":[{"number":"2000","category":"random"},{"number":"2000","category":"random"},{"number":"2000","category":"random"},{"number":"1884","category":"random"}]},"operator":"and","dataSetId":47348,"name":"线下高价值流失会员激活","expireDate":"2018-05-23","createUser":{"userName":"张雪莹","userId":"010618"},"id":"C7FEFBE1725000017DF04B60CF301007","conditions":[{"id":"C7FEFCFB20C00001149E16801D301914","conditions":[{"item":{"fieldName":"eb_total_consume_cnt","fieldType":"number"},"comparisonOperator":"eq","values":["0"],"id":"C7FEFCFD9DA00001AD5872B1EAF51DAC","nodeType":"condition"},{"item":{"fieldName":"total_consume_amt","fieldType":"number"},"comparisonOperator":"gte","values":["100"],"id":"C7FEFD00E010000160A731001350E500","nodeType":"condition"},{"item":{"fieldName":"member_level_id","fieldType":"number"},"comparisonOperator":"IN_OPTIONS","values":[1],"id":"C7FEFD04AF700001BD5516DA252A1691","nodeType":"condition"},{"item":{"fieldName":"total_consume_cnt","fieldType":"number"},"comparisonOperator":"gte","values":["3"],"id":"C7FEFD07A40000014993197013704E20","nodeType":"condition"},{"item":{"fieldName":"total_consume_cnt","fieldType":"number"},"comparisonOperator":"lt","values":["5"],"id":"C7FEFD0B2CE00001D93A1E2010301FDF","nodeType":"condition"},{"item":{"fieldName":"last_consume_duration","fieldType":"number"},"comparisonOperator":"eq","values":["50"],"id":"C7FEFD0E271000017FDEDE1161A01B18","nodeType":"condition"}],"nodeType":"group","operator":"and"}]}'
+
+select member_id,phone_num,wx_open_id from xx where  1 = 1   and ( 1 = 1   and eb_total_consume_cnt = 0   and total_consume_amt >= 100   and member_level_id in (1)   and total_consume_cnt >= 3   and total_consume_cnt < 5   and last_consume_duration = 50   )  group by member_id,phone_num,wx_open_id  
+
+
+ab -p test.json -T application/json -H 'Authorization: Token abcd1234' -c 10 -n 2000 http://localhost:8080/sqltag/preview
+
+

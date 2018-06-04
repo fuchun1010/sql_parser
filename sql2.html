@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>sql2</title>
+
+	<script type="text/javascript">
+
+		const innerOne = {
+		  "name": "一个测试标签",
+		  "cron": "* 1 * * *",
+		  "selectFields": [
+		    {
+		      "fieldName": "member_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "phone_num",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "wx_open_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    }
+		  ],
+		  "fromTable": "mem_market_tag_datail_record",
+		  "conditions": [
+		    {
+		      "id": "C801DADEB96000015FBE1900673019D8",
+		      "conditions": [
+		        {
+		          "item": {
+		            "fieldName": "c1",
+		            "fieldType": "number"
+		          },
+		          "comparisonOperator": "IN_OPTIONS",
+		          "selectFields": [
+		            {
+		              "fieldName": "c1",
+		              "fieldType": "text",
+		              "fun": ""
+		            }
+		          ],
+		          "fromTable": "mem_market_tag_datail_record",
+		          "nodeType": "condition",
+		          "conditions": [
+		            {
+		              "item": {
+		                "fieldName": "c2",
+		                "fieldType": "number"
+		              },
+		              "comparisonOperator": "eq",
+		              "values": [
+		                3
+		              ]
+		            }
+		          ],
+		          "groupBy": [
+		            {
+		              "fieldName": "c1"
+		            }
+		          ],
+		          "hiveBy": [
+		            {
+		              "fieldName": "x1",
+		              "fun": "sum/max/avg",
+		              "opt": "gt/eq/gte/le/lte",
+		              "values": 200
+		            }
+		          ]
+		        }
+		      ],
+		      "nodeType": "group",
+		      "operator": "and"
+		    },
+		    {
+		      "item": {
+		        "fieldName": "eb_total_consume_cnt",
+		        "fieldType": "number"
+		      },
+		      "comparisonOperator": "eq",
+		      "values": [
+		        "0"
+		      ],
+		      "id": "C7FEFCFD9DA00001AD5872B1EAF51DAC",
+		      "nodeType": "condition"
+		    }
+		  ],
+		  "operator": "and",
+		  "groupBy": [
+		    {
+		      "fieldName": "member_id"
+		    },
+		    {
+		      "fieldName": "phone_num"
+		    },
+		    {
+		      "fieldName": "wx_open_id"
+		    }
+		  ],
+		  "isActive": true,
+		  "createUser": {
+		    "userName": "娄宏",
+		    "userId": "011738"
+		  },
+		  "divedGroups": {
+		    "split": [
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "1884",
+		        "category": "random"
+		      }
+		    ]
+		  },
+		  "isEnable": true,
+		  "startDate": "2017-01-28",
+		  "endDate": "2017-01-28",
+		  "expireDate": "2017-12-28"
+		}
+
+		function convertComparator(op) {
+			let key = op.toLowerCase()
+			let obj = {
+				in_options: {
+					range: true,
+					op: 'in'
+				},
+				eq: {
+					range: false,
+					op: '='
+				},
+				gte: {
+					range: false,
+					op: '>='
+				},
+				gt: {
+					range: false,
+					op: '>'
+				},
+				lte: {
+					range: false,
+					op: '<='
+				},
+				lt: {
+					range: false,
+					op: '<'
+				}
+			}
+			return obj[key]
+		}
+
+		function convertValue(fieldType,range, values) {
+			debugger
+			let isTextType = fieldType.toLowerCase() === 'Text'
+			let v = void 0
+			if(range) {
+				v = isTextType ? values.map(d => `'${d}'`): values
+				v = `(${v.join(',')})`
+			}
+			else {
+				v = isTextType ? values.map(d => `'${d}'`).join(''): values.join('')
+			}
+			return v
+		}
+
+
+		function toSelectFields(fields) {
+			const isExistedSelectFields = fields && Array.isArray(fields) && fields.length > 0
+			if(!isExistedSelectFields) {
+				return ""
+			}
+			const rs = ["select"]
+			let selectSmt = fields.map(field => {
+				let {fieldName, fun} = field
+				let f = fun && fun.trim().length > 0 ? `${fun}(${fieldName})`:`${fieldName}`
+				return f
+			}).join(",")
+			rs.push(selectSmt)
+			return  rs.join(" ")
+		}
+
+		function toFromTable(table) {
+			if(!table) {
+				return ""
+			}
+			const rs = ["from", table]
+			return rs.join(" ")
+		}
+
+		function parseCondition(c) {
+
+		}
+
+		function toWhere(c) {
+			
+			function parse(conditions, tmp) {
+				//debugger
+				let len = conditions.length
+
+				for(let i = 0; i < len; i++) {
+					let c = conditions[i]
+					//debugger
+					if(c.operator) {
+						let op = c.operator === 'and' ? " 1 = 1 and ": ""
+						if(op.trim().length > 0) {
+							tmp.push(op)
+						}
+					}
+
+					let isSubQuery = c.nodeType === 'group'
+
+					if(isSubQuery) {
+						let smt = ["("]
+						//debugger
+						let response =  parse(c.conditions, smt)
+						//debugger
+						//TODO exists groupBy, add
+						//TODO exists hibeBy, add
+						smt.join(")")
+						tmp.push(response)
+						//TODO 可能要补and
+						if(i != len - 1) {
+							let op = c.operator === 'and' ? "and": ""
+							if(op.trim().length > 0) {
+								tmp.push(op)
+							}
+						}
+					}
+					else {
+						let {item:{fieldName,fieldType}, comparisonOperator,selectFields, fromTable, nodeType,  groupBy, hiveBy, values } = c
+
+						let {range, op} = convertComparator(comparisonOperator)
+
+						tmp.push(fieldName)
+						tmp.push(op)
+						if(selectFields) {
+							tmp.push("(")
+							let s = toSelectFields(selectFields)
+							tmp.push(s)
+							let t = toFromTable(fromTable)
+							tmp.push(t)
+
+							if(nodeType === 'group') {
+								let smt = ["("]
+								//debugger
+								let response =  parse(c.conditions, smt)
+								//debugger
+								//TODO exists groupBy, add
+								//TODO exists hibeBy, add
+								smt.join(")")
+								tmp.push(response)
+							}
+							else {
+								if(c.conditions) {
+									let response = parse(c.conditions, ["where"])
+									//debugger
+									tmp.push(response)
+								}
+								else {
+									let v = convertValue(fieldType,range, values)
+									tmp.push(v)
+								}
+								
+							}
+
+							tmp.push(")")
+						}
+						else {
+							//debugger
+							let v = convertValue(fieldType, range, values)
+							tmp.push(v)
+						}
+					}
+				}
+
+				return tmp.join(" ")
+
+			} 
+
+			const rs = parse(c, ["where"])
+			debugger
+			return rs
+		}
+
+		function toGroup() {
+
+		}
+
+		function toHive() {
+
+		}
+
+		function toSql(smt) {
+			const {selectFields, fromTable, conditions, groupBy, hiveBy} = smt
+			const rs = []
+			let selectSmt = toSelectFields(selectFields)
+			rs.push(selectSmt)
+
+			let fromSmt = toFromTable(fromTable)
+			rs.push(fromSmt)
+
+
+			let whereSmt = toWhere(conditions)
+			rs.push(whereSmt)
+
+			return rs.length > 0 ? rs.join(" "): ""
+		}
+
+		const sql = toSql(innerOne)
+		console.log('sql=', sql)
+
+
+	</script>
+</head>
+
+<body>
+
+</body>
+</html>
