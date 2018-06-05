@@ -132,6 +132,96 @@
 		  "expireDate": "2017-12-28"
 		}
 
+		const simpleOne = {
+		  "name": "一个测试标签",
+		  "cron": "* 1 * * *",
+		  "selectFields": [
+		    {
+		      "fieldName": "member_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "phone_num",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "wx_open_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    }
+		  ],
+		  "fromTable": "mem_market_tag_datail_record",
+		  "conditions": [
+		    {
+		      "item": {
+		        "fieldName": "eb_total_consume_cnt",
+		        "fieldType": "number"
+		      },
+		      "comparisonOperator": "eq",
+		      "values": [
+		        "0"
+		      ],
+		      "id": "C7FEFCFD9DA00001AD5872B1EAF51DAC",
+		      "nodeType": "condition"
+		    },
+		    {
+		      "item": {
+		        "fieldName": "c1",
+		        "fieldType": "number"
+		      },
+		      "comparisonOperator": "eq",
+		      "values": [
+		        "100"
+		      ],
+		      "id": "C7FEFCFD9DA00001AD5872B1EAF51DAC",
+		      "nodeType": "condition"
+		    }
+		  ],
+		  "operator": "and",
+		  "groupBy": [
+		    {
+		      "fieldName": "member_id"
+		    },
+		    {
+		      "fieldName": "phone_num"
+		    },
+		    {
+		      "fieldName": "wx_open_id"
+		    }
+		  ],
+		  "isActive": true,
+		  "createUser": {
+		    "userName": "娄宏",
+		    "userId": "011738"
+		  },
+		  "divedGroups": {
+		    "split": [
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "1884",
+		        "category": "random"
+		      }
+		    ]
+		  },
+		  "isEnable": true,
+		  "startDate": "2017-01-28",
+		  "endDate": "2017-01-28",
+		  "expireDate": "2017-12-28"
+		}
+
 		function convertComparator(op) {
 			let key = op.toLowerCase()
 			let obj = {
@@ -206,13 +296,21 @@
 
 		function toWhere(c) {
 			
-			function parse(conditions, tmp) {
-				//debugger
+			function parse(external, tmp) {
+				debugger
+					
+				const {conditions, operator} = external
+				debugger
+
 				let len = conditions.length
+				let op = operator === 'and' ? " 1 = 1 and ": ""
+				if(op.trim().length > 0){
+					tmp.push(op)
+				}
 
 				for(let i = 0; i < len; i++) {
 					let c = conditions[i]
-					//debugger
+					debugger
 					if(c.operator) {
 						let op = c.operator === 'and' ? " 1 = 1 and ": ""
 						if(op.trim().length > 0) {
@@ -223,8 +321,10 @@
 					let isSubQuery = c.nodeType === 'group'
 
 					if(isSubQuery) {
-						//debugger
-						let response =  parse(c.conditions, [])
+						debugger
+						let tmpObj = Object.assign({}, {conditions: c.conditions})
+						debugger
+						let response =  parse(tmpObj, [])
 						tmp.push(response)
 					}
 					else {
@@ -243,17 +343,18 @@
 
 							if(nodeType === 'group') {
 								let smt = ["("]
+								//debugger
+								let tmpData = Object.assign({}, {conditions:c.conditions})
 								debugger
-								let response =  parse(c.conditions, smt)
-								debugger
-								//TODO exists groupBy, add
-								//TODO exists hibeBy, add
+								let response =  parse(tmpData, smt)
+								//debugger
 								smt.join(")")
 								tmp.push(response)
 							}
 							else {
 								if(c.conditions) {
-									let response = parse(c.conditions, ["where"])
+									let tmpData = Object.assign({}, {conditions:c.conditions})
+									let response = parse(tmpData, ["where"])
 									//debugger
 									tmp.push(response)
 								}
@@ -276,10 +377,10 @@
 							tmp.push(v)
 						}
 					}
-
+					debugger
 					//最后还要条条件需要补operator
 					if(i != len - 1) {
-						let op = c.operator === 'and' ? "and": ""
+						let op = c.operator || operator === 'and' ? "and": ""
 						if(op.trim().length > 0) {
 							tmp.push(op)
 						}
@@ -289,7 +390,7 @@
 				return tmp.join(" ")
 
 			} 
-
+			debugger
 			const rs = parse(c, ["where"])
 			debugger
 			return rs
@@ -324,7 +425,8 @@
 		}
 
 		function toSql(smt) {
-			const {selectFields, fromTable, conditions, groupBy, hiveBy} = smt
+			const {selectFields, fromTable, operator, conditions, groupBy, hiveBy} = smt
+			
 			const rs = []
 			let selectSmt = toSelectFields(selectFields)
 			rs.push(selectSmt)
@@ -333,7 +435,7 @@
 			rs.push(fromSmt)
 
 
-			let whereSmt = toWhere(conditions)
+			let whereSmt = toWhere({operator, conditions})
 			rs.push(whereSmt)
 
 			rs.push(toGroup(groupBy))
@@ -344,6 +446,9 @@
 		}
 
 		const sql = toSql(innerOne)
+		
+		//const sql = toSql(simpleOne)
+
 		console.log('sql=', sql)
 
 
