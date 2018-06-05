@@ -312,6 +312,334 @@
 		  "expireDate": "2017-12-28"
 		}
 
+		const multiSub = {
+		  "name": "一个测试标签",
+		  "cron": "* 1 * * *",
+		  "selectFields": [
+		    {
+		      "fieldName": "member_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "phone_num",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "wx_open_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    }
+		  ],
+		  "fromTable": "mem_market_tag_datail_record",
+		  "conditions": [
+		    {
+		      "id": "C801DADEB96000015FBE1900673019D8",
+		      "conditions": [
+		        {
+		          "item": {
+		            "fieldName": "c1",
+		            "fieldType": "number"
+		          },
+		          "comparisonOperator": "IN_OPTIONS",
+		          "selectFields": [
+		            {
+		              "fieldName": "c1",
+		              "fieldType": "text",
+		              "fun": ""
+		            }
+		          ],
+		          "fromTable": "mem_market_tag_datail_record",
+		          "nodeType": "condition",
+		          "conditions": [
+		            {
+		              "item": {
+		                "fieldName": "c2",
+		                "fieldType": "number"
+		              },
+		              "comparisonOperator": "eq",
+		              "values": [
+		                3
+		              ]
+		            }
+		          ],
+		          "groupBy": [
+		            {
+		              "fieldName": "c1"
+		            }
+		          ],
+		          "hiveBy": [
+		            {
+		              "fieldName": "x1",
+		              "fieldType": "number",
+		              "fun": "sum",
+		              "opt": "gt",
+		              "values": [200]
+		            }
+		          ]
+		        }
+		      ],
+		      "nodeType": "group",
+		      "operator": "and"
+		    },
+		    {
+		      "id": "C801DADEB96000015FBE1900673019D8",
+		      "conditions": [
+		        {
+		          "item": {
+		            "fieldName": "c6",
+		            "fieldType": "number"
+		          },
+		          "comparisonOperator": "IN_OPTIONS",
+		          "selectFields": [
+		            {
+		              "fieldName": "c7",
+		              "fieldType": "text",
+		              "fun": ""
+		            }
+		          ],
+		          "fromTable": "mem_market_tag_datail_record",
+		          "nodeType": "condition",
+		          "conditions": [
+		            {
+		              "item": {
+		                "fieldName": "c8",
+		                "fieldType": "number"
+		              },
+		              "comparisonOperator": "eq",
+		              "values": [
+		                100
+		              ]
+		            }
+		          ],
+		          "groupBy": [
+		            {
+		              "fieldName": "c9"
+		            }
+		          ],
+		          "hiveBy": [
+		            {
+		              "fieldName": "c1",
+		              "fieldType": "number",
+		              "fun": "sum",
+		              "opt": "gt",
+		              "values": [200]
+		            }
+		          ]
+		        }
+		      ],
+		      "nodeType": "group",
+		      "operator": "and"
+		    }
+		  ],
+		  "operator": "and",
+		  "groupBy": [
+		    {
+		      "fieldName": "member_id"
+		    },
+		    {
+		      "fieldName": "phone_num"
+		    },
+		    {
+		      "fieldName": "wx_open_id"
+		    }
+		  ],
+		  "isActive": true,
+		  "createUser": {
+		    "userName": "娄宏",
+		    "userId": "011738"
+		  },
+		  "divedGroups": {
+		    "split": [
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "1884",
+		        "category": "random"
+		      }
+		    ]
+		  },
+		  "isEnable": true,
+		  "startDate": "2017-01-28",
+		  "endDate": "2017-01-28",
+		  "expireDate": "2017-12-28"
+		}
+
+		const multiSubWithOr = {
+		  "name": "一个测试标签",
+		  "cron": "* 1 * * *",
+		  "selectFields": [
+		    {
+		      "fieldName": "member_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "phone_num",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "wx_open_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    }
+		  ],
+		  "fromTable": "mem_market_tag_datail_record",
+		  "conditions": [
+		    {
+		      "id": "C801DADEB96000015FBE1900673019D8",
+		      "conditions": [
+		        {
+		          "item": {
+		            "fieldName": "c1",
+		            "fieldType": "number"
+		          },
+		          "comparisonOperator": "IN_OPTIONS",
+		          "selectFields": [
+		            {
+		              "fieldName": "c1",
+		              "fieldType": "text",
+		              "fun": ""
+		            }
+		          ],
+		          "fromTable": "mem_market_tag_datail_record",
+		          "nodeType": "condition",
+		          "conditions": [
+		            {
+		              "item": {
+		                "fieldName": "c2",
+		                "fieldType": "number"
+		              },
+		              "comparisonOperator": "eq",
+		              "values": [
+		                3
+		              ]
+		            }
+		          ],
+		          "groupBy": [
+		            {
+		              "fieldName": "c1"
+		            }
+		          ],
+		          "hiveBy": [
+		            {
+		              "fieldName": "x1",
+		              "fieldType": "number",
+		              "fun": "sum",
+		              "opt": "gt",
+		              "values": [200]
+		            }
+		          ]
+		        }
+		      ],
+		      "nodeType": "group",
+		      "operator": "and"
+		    },
+		    {
+		      "id": "C801DADEB96000015FBE1900673019D8",
+		      "conditions": [
+		        {
+		          "item": {
+		            "fieldName": "c6",
+		            "fieldType": "number"
+		          },
+		          "comparisonOperator": "IN_OPTIONS",
+		          "selectFields": [
+		            {
+		              "fieldName": "c7",
+		              "fieldType": "text",
+		              "fun": ""
+		            }
+		          ],
+		          "fromTable": "mem_market_tag_datail_record",
+		          "nodeType": "condition",
+		          "conditions": [
+		            {
+		              "item": {
+		                "fieldName": "c8",
+		                "fieldType": "number"
+		              },
+		              "comparisonOperator": "eq",
+		              "values": [
+		                100
+		              ]
+		            }
+		          ],
+		          "groupBy": [
+		            {
+		              "fieldName": "c9"
+		            }
+		          ],
+		          "hiveBy": [
+		            {
+		              "fieldName": "c1",
+		              "fieldType": "number",
+		              "fun": "sum",
+		              "opt": "gt",
+		              "values": [200]
+		            }
+		          ]
+		        }
+		      ],
+		      "nodeType": "group",
+		      "operator": "and"
+		    }
+		  ],
+		  "operator": "or",
+		  "groupBy": [
+		    {
+		      "fieldName": "member_id"
+		    },
+		    {
+		      "fieldName": "phone_num"
+		    },
+		    {
+		      "fieldName": "wx_open_id"
+		    }
+		  ],
+		  "isActive": true,
+		  "createUser": {
+		    "userName": "娄宏",
+		    "userId": "011738"
+		  },
+		  "divedGroups": {
+		    "split": [
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "1884",
+		        "category": "random"
+		      }
+		    ]
+		  },
+		  "isEnable": true,
+		  "startDate": "2017-01-28",
+		  "endDate": "2017-01-28",
+		  "expireDate": "2017-12-28"
+		}
+
 		function convertComparator(op) {
 			let key = op.toLowerCase()
 			let obj = {
@@ -383,13 +711,11 @@
 		function toWhere(c) {
 			
 			function parse(external, tmp) {
-				//debugger
-					
+				
 				const {conditions, operator} = external
-				//debugger
 
 				let len = conditions.length
-				let op = operator === 'and' ? " 1 = 1 and ": ""
+				let op = operator === 'and' ? "1=1 and": ""
 				if(op.trim().length > 0){
 					tmp.push(op)
 				}
@@ -398,7 +724,7 @@
 					let c = conditions[i]
 					//debugger
 					if(c.operator) {
-						let op = c.operator === 'and' ? " 1 = 1 and ": ""
+						let op = c.operator === 'and' ? "1=1 and": ""
 						if(op.trim().length > 0 ) {
 							if(tmp.length > 0 && tmp[tmp.length - 1] != op) {
 								tmp.push(op)
@@ -470,7 +796,7 @@
 					//debugger
 					//最后还要条条件需要补operator
 					if(i != len - 1) {
-						let op = c.operator || operator === 'and' ? "and": "or"
+						let op = (operator || c.operator) === 'and' ? 'and': 'or'
 						if(op.trim().length > 0) {
 							tmp.push(op)
 						}
@@ -481,8 +807,10 @@
 
 			} 
 			//debugger
-			const rs = parse(c, ["where"])
+			let rs = parse(c, ["where"])
 			debugger
+
+			rs = rs.replace(/1=1 and/g, '')
 			return rs
 		}
 
@@ -539,7 +867,11 @@
 		
 		//const sql = toSql(simpleOne)
 		
-		const sql = toSql(simpleOneWithOr)
+		//const sql = toSql(simpleOneWithOr)
+		
+		//const sql = toSql(multiSub)
+		
+		//const sql = toSql(multiSubWithOr)
 
 		console.log('sql=', sql)
 
