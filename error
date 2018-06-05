@@ -1,0 +1,31 @@
+
+error
+2018-06-05 10:19:59,571 ERROR 6277 [-/218.17.185.15/-/2ms GET /mem_market_tag_datail_record/itemname/fieldData] [controller.enums] fetch field
+enum error: Cannot read property 'category' of null
+2018-06-05 10:19:59,606 ERROR 6277 [-/218.17.185.15/-/1ms GET /mem_market_tag_datail_record/coupon_batch_num/fieldData] [controller.enums] fetc
+h field enum error: Cannot read property 'category' of null
+2018-06-05 10:19:59,624 ERROR 6277 [-/218.17.185.15/-/2ms GET /mem_market_tag_datail_record/first_login_store_name/fieldData] [controller.enums
+] fetch field enum error: Cannot read property 'category' of null
+2018-06-05 10:24:05,988 ERROR 6247 A client (127.0.0.1:46146) error [HPE_INVALID_METHOD] occurred: Parse Error
+2018-06-05 10:27:25,247 ERROR 6269 [-/10.8.13.172/-/16ms POST /tag/preview/numbers] [controller.tag] preview tag error:Request failed with stat
+us code 400
+2018-06-05 10:30:47,273 ERROR 6263 [-/218.17.185.15/-/3ms GET /mem_market_tag_datail_record/itemname/fieldData] [controller.enums] fetch field
+enum error: Cannot read property 'category' of null
+2018-06-05 10:30:47,314 ERROR 6263 [-/218.17.185.15/-/3ms GET /mem_market_tag_datail_record/coupon_batch_num/fieldData] [controller.enums] fetc
+h field enum error: Cannot read property 'category' of null
+2018-06-05 10:30:47,336 ERROR 6263 [-/218.17.185.15/-/3ms GET /mem_market_tag_datail_record/first_login_store_name/fieldData] [controller.enums
+] fetch field enum error: Cannot read property 'category' of null
+2018-06-05 10:44:00,424 ERROR 6248 [-/10.8.13.172/-/2ms GET /mem_market_tag_datail_record/itemname/fieldData] [controller.enums] fetch field en
+um error: Cannot read property 'category' of null
+2018-06-05 10:44:00,534 ERROR 6248 [-/10.8.13.172/-/3ms GET /mem_market_tag_datail_record/coupon_batch_num/fieldData] [controller.enums] fetch
+field enum error: Cannot read property 'category' of null
+2018-06-05 10:44:00,576 ERROR 6248 [-/10.8.13.172/-/2ms GET /mem_market_tag_datail_record/first_login_store_name/fieldData] [controller.enums]
+fetch field enum error: Cannot read property 'category' of null
+2018-06-05 10:45:23,895 ERROR 6247 [-/10.8.13.172/-/4ms GET /mem_market_tag_sum/total_consume_cnt/fieldData] [controller.enums] fetch field enu
+m error: Cannot read property 'category' of null
+2018-06-05 10:45:38,730 ERROR 6257 [-/10.8.13.172/-/2ms GET /mem_market_tag_sum/total_consume_amt/fieldData] [controller.enums] fetch field enu
+m error: Cannot read property 'category' of null
+2018-06-05 10:46:01,049 ERROR 6269 [-/10.8.13.172/-/3ms GET /mem_market_tag_sum/last_consume_duration/fieldData] [controller.enums] fetch field
+ enum error: Cannot read property 'category' of null
+2018-06-05 10:46:14,117 ERROR 6279 [-/10.8.13.172/-/2ms GET /mem_market_tag_sum/total_deposit_cnt/fieldData] [controller.enums] fetch field enu
+m error: Cannot read property 'category' of null
