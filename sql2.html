@@ -297,10 +297,10 @@
 		function toWhere(c) {
 			
 			function parse(external, tmp) {
-				debugger
+				//debugger
 					
 				const {conditions, operator} = external
-				debugger
+				//debugger
 
 				let len = conditions.length
 				let op = operator === 'and' ? " 1 = 1 and ": ""
@@ -310,21 +310,23 @@
 
 				for(let i = 0; i < len; i++) {
 					let c = conditions[i]
-					debugger
+					//debugger
 					if(c.operator) {
 						let op = c.operator === 'and' ? " 1 = 1 and ": ""
-						if(op.trim().length > 0) {
-							tmp.push(op)
+						if(op.trim().length > 0 ) {
+							if(tmp.length > 0 && tmp[tmp.length - 1] != op) {
+								tmp.push(op)
+							}
+							
 						}
 					}
 
 					let isSubQuery = c.nodeType === 'group'
 
 					if(isSubQuery) {
-						debugger
-						let tmpObj = Object.assign({}, {conditions: c.conditions})
-						debugger
-						let response =  parse(tmpObj, [])
+						//debugger
+						let response =  parse(c, [])
+						//debugger
 						tmp.push(response)
 					}
 					else {
@@ -345,7 +347,7 @@
 								let smt = ["("]
 								//debugger
 								let tmpData = Object.assign({}, {conditions:c.conditions})
-								debugger
+								//debugger
 								let response =  parse(tmpData, smt)
 								//debugger
 								smt.join(")")
@@ -353,7 +355,9 @@
 							}
 							else {
 								if(c.conditions) {
-									let tmpData = Object.assign({}, {conditions:c.conditions})
+									//debugger
+									let tmpData = Object.assign({}, {conditions:c.conditions, operator})
+									//debugger
 									let response = parse(tmpData, ["where"])
 									//debugger
 									tmp.push(response)
@@ -377,7 +381,7 @@
 							tmp.push(v)
 						}
 					}
-					debugger
+					//debugger
 					//最后还要条条件需要补operator
 					if(i != len - 1) {
 						let op = c.operator || operator === 'and' ? "and": ""
@@ -390,7 +394,7 @@
 				return tmp.join(" ")
 
 			} 
-			debugger
+			//debugger
 			const rs = parse(c, ["where"])
 			debugger
 			return rs
@@ -445,9 +449,9 @@
 			return rs.length > 0 ? rs.join(" "): ""
 		}
 
-		const sql = toSql(innerOne)
+		//const sql = toSql(innerOne)
 		
-		//const sql = toSql(simpleOne)
+		const sql = toSql(simpleOne)
 
 		console.log('sql=', sql)
 
