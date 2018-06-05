@@ -640,6 +640,174 @@
 		  "expireDate": "2017-12-28"
 		}
 
+		const nestedOnce = {
+		  "name": "一个测试标签",
+		  "cron": "* 1 * * *",
+		  "selectFields": [
+		    {
+		      "fieldName": "member_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "phone_num",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "wx_open_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    }
+		  ],
+		  "fromTable": "mem_market_tag_datail_record",
+		  "conditions": [
+		    {
+		      "id": "C801DADEB96000015FBE1900673019D8",
+		      "conditions": [
+		        {
+		          "item": {
+		            "fieldName": "c1",
+		            "fieldType": "number"
+		          },
+		          "comparisonOperator": "IN_OPTIONS",
+		          "selectFields": [
+		            {
+		              "fieldName": "c1",
+		              "fieldType": "text",
+		              "fun": ""
+		            }
+		          ],
+		          "fromTable": "mem_market_tag_datail_record",
+		          "nodeType": "condition",
+		          "conditions": [
+		            {
+		              "item": {
+		                "fieldName": "c2",
+		                "fieldType": "number"
+		              },
+		              "comparisonOperator": "eq",
+		              "values": [
+		                3
+		              ]
+		            },
+		            {
+		              "id": "C801DADEB96000015FBE1900673019D8",
+		              "conditions": [
+		                {
+		                  "item": {
+		                    "fieldName": "c6",
+		                    "fieldType": "number"
+		                  },
+		                  "comparisonOperator": "IN_OPTIONS",
+		                  "selectFields": [
+		                    {
+		                      "fieldName": "c7",
+		                      "fieldType": "text",
+		                      "fun": ""
+		                    }
+		                  ],
+		                  "fromTable": "xx",
+		                  "nodeType": "condition",
+		                  "conditions": [
+		                    {
+		                      "item": {
+		                        "fieldName": "c8",
+		                        "fieldType": "number"
+		                      },
+		                      "comparisonOperator": "eq",
+		                      "values": [
+		                        100
+		                      ]
+		                    }
+		                  ],
+		                  "groupBy": [
+		                    {
+		                      "fieldName": "c9"
+		                    }
+		                  ],
+		                  "hiveBy": [
+		                    {
+		                      "fieldName": "c1",
+		                      "fieldType": "number",
+		                      "fun": "sum",
+		                      "opt": "gt",
+		                      "values": [
+		                        200
+		                      ]
+		                    }
+		                  ]
+		                }
+		              ],
+		              "nodeType": "group",
+		              "operator": "and"
+		            }
+		          ],
+		          "groupBy": [
+		            {
+		              "fieldName": "c1"
+		            }
+		          ],
+		          "hiveBy": [
+		            {
+		              "fieldName": "x1",
+		              "fieldType": "number",
+		              "fun": "sum",
+		              "opt": "gt",
+		              "values": [
+		                200
+		              ]
+		            }
+		          ]
+		        }
+		      ],
+		      "nodeType": "group",
+		      "operator": "and"
+		    }
+		  ],
+		  "operator": "and",
+		  "groupBy": [
+		    {
+		      "fieldName": "member_id"
+		    },
+		    {
+		      "fieldName": "phone_num"
+		    },
+		    {
+		      "fieldName": "wx_open_id"
+		    }
+		  ],
+		  "isActive": true,
+		  "createUser": {
+		    "userName": "娄宏",
+		    "userId": "011738"
+		  },
+		  "divedGroups": {
+		    "split": [
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "1884",
+		        "category": "random"
+		      }
+		    ]
+		  },
+		  "isEnable": true,
+		  "startDate": "2017-01-28",
+		  "endDate": "2017-01-28",
+		  "expireDate": "2017-12-28"
+		}
+
 		function convertComparator(op) {
 			let key = op.toLowerCase()
 			let obj = {
@@ -710,6 +878,14 @@
 
 		function toWhere(c) {
 			
+			if(!c){
+				return ""
+			}
+
+			if(Object.keys(c).length === 0) {
+				return ""
+			}
+
 			function parse(external, tmp) {
 				
 				const {conditions, operator} = external
@@ -722,7 +898,7 @@
 
 				for(let i = 0; i < len; i++) {
 					let c = conditions[i]
-					//debugger
+					debugger
 					if(c.operator) {
 						let op = c.operator === 'and' ? "1=1 and": ""
 						if(op.trim().length > 0 ) {
@@ -736,16 +912,18 @@
 					let isSubQuery = c.nodeType === 'group'
 
 					if(isSubQuery) {
-						//debugger
+						debugger
 						let response =  parse(c, [])
-						//debugger
+						debugger
 						tmp.push(response)
 					}
 					else {
 						let {item:{fieldName,fieldType}, comparisonOperator,selectFields, fromTable, nodeType,  groupBy, hiveBy, values } = c
 
 						let {range, op} = convertComparator(comparisonOperator)
-
+						if(fieldName === 'c6' || fieldName === 'c7') {
+							debugger
+						}
 						tmp.push(fieldName)
 						tmp.push(op)
 						if(selectFields) {
@@ -775,6 +953,7 @@
 									tmp.push(response)
 								}
 								else {
+									debugger
 									let v = convertValue(fieldType,range, values)
 									tmp.push(v)
 								}
@@ -872,6 +1051,8 @@
 		//const sql = toSql(multiSub)
 		
 		//const sql = toSql(multiSubWithOr)
+
+		const sql = toSql(nestedOnce)
 
 		console.log('sql=', sql)
 

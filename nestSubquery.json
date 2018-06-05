@@ -1,0 +1,167 @@
+{
+		  "name": "一个测试标签",
+		  "cron": "* 1 * * *",
+		  "selectFields": [
+		    {
+		      "fieldName": "member_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "phone_num",
+		      "fieldType": "text",
+		      "fun": ""
+		    },
+		    {
+		      "fieldName": "wx_open_id",
+		      "fieldType": "text",
+		      "fun": ""
+		    }
+		  ],
+		  "fromTable": "mem_market_tag_datail_record",
+		  "conditions": [
+		    {
+		      "id": "C801DADEB96000015FBE1900673019D8",
+		      "conditions": [
+		        {
+		          "item": {
+		            "fieldName": "c1",
+		            "fieldType": "number"
+		          },
+		          "comparisonOperator": "IN_OPTIONS",
+		          "selectFields": [
+		            {
+		              "fieldName": "c1",
+		              "fieldType": "text",
+		              "fun": ""
+		            }
+		          ],
+		          "fromTable": "mem_market_tag_datail_record",
+		          "nodeType": "condition",
+		          "conditions": [
+		            {
+		              "item": {
+		                "fieldName": "c2",
+		                "fieldType": "number"
+		              },
+		              "comparisonOperator": "eq",
+		              "values": [
+		                3
+		              ]
+		            },
+		            {
+		              "id": "C801DADEB96000015FBE1900673019D8",
+		              "conditions": [
+		                {
+		                  "item": {
+		                    "fieldName": "c6",
+		                    "fieldType": "number"
+		                  },
+		                  "comparisonOperator": "IN_OPTIONS",
+		                  "selectFields": [
+		                    {
+		                      "fieldName": "c7",
+		                      "fieldType": "text",
+		                      "fun": ""
+		                    }
+		                  ],
+		                  "fromTable": "xx",
+		                  "nodeType": "condition",
+		                  "conditions": [
+		                    {
+		                      "item": {
+		                        "fieldName": "c8",
+		                        "fieldType": "number"
+		                      },
+		                      "comparisonOperator": "eq",
+		                      "values": [
+		                        100
+		                      ]
+		                    }
+		                  ],
+		                  "groupBy": [
+		                    {
+		                      "fieldName": "c9"
+		                    }
+		                  ],
+		                  "hiveBy": [
+		                    {
+		                      "fieldName": "c1",
+		                      "fieldType": "number",
+		                      "fun": "sum",
+		                      "opt": "gt",
+		                      "values": [
+		                        200
+		                      ]
+		                    }
+		                  ]
+		                }
+		              ],
+		              "nodeType": "group",
+		              "operator": "and"
+		            }
+		          ],
+		          "groupBy": [
+		            {
+		              "fieldName": "c1"
+		            }
+		          ],
+		          "hiveBy": [
+		            {
+		              "fieldName": "x1",
+		              "fieldType": "number",
+		              "fun": "sum",
+		              "opt": "gt",
+		              "values": [
+		                200
+		              ]
+		            }
+		          ]
+		        }
+		      ],
+		      "nodeType": "group",
+		      "operator": "and"
+		    }
+		  ],
+		  "operator": "and",
+		  "groupBy": [
+		    {
+		      "fieldName": "member_id"
+		    },
+		    {
+		      "fieldName": "phone_num"
+		    },
+		    {
+		      "fieldName": "wx_open_id"
+		    }
+		  ],
+		  "isActive": true,
+		  "createUser": {
+		    "userName": "娄宏",
+		    "userId": "011738"
+		  },
+		  "divedGroups": {
+		    "split": [
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "2000",
+		        "category": "random"
+		      },
+		      {
+		        "number": "1884",
+		        "category": "random"
+		      }
+		    ]
+		  },
+		  "isEnable": true,
+		  "startDate": "2017-01-28",
+		  "endDate": "2017-01-28",
+		  "expireDate": "2017-12-28"
+		}
