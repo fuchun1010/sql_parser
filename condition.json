@@ -1,0 +1,96 @@
+{
+  "selectFields": [
+    {
+      "fieldName": "member_id",
+      "fieldType": "text",
+      "fun": ""
+    },
+    {
+      "fieldName": "phone_num",
+      "fieldType": "text",
+      "fun": ""
+    },
+    {
+      "fieldName": "wx_open_id",
+      "fieldType": "text",
+      "fun": ""
+    }
+  ],
+  "dataSetId": 40841,
+  "executeStatus": "wait",
+  "createUser": {
+    "userName": "吴沁芮",
+    "userId": "012365"
+  },
+  "id": "C8042FA853500001F8B7181A20358C20",
+  "groupBy": [
+    {
+      "fieldName": "member_id"
+    },
+    {
+      "fieldName": "phone_num"
+    },
+    {
+      "fieldName": "wx_open_id"
+    }
+  ],
+  "isActive": true,
+  "conditions": [
+    {
+      "id": "C8042FA855200001D5B5D91116001AC6",
+      "conditions": [
+        {
+          "item": {
+            "fieldName": "last_consume_time",
+            "fieldType": "date"
+          },
+          "comparisonOperator": "gte",
+          "values": [
+            "20180420000000"
+          ],
+          "id": "C8042FBF76100001DC6873001EF0A5E0",
+          "nodeType": "condition"
+        },
+        {
+          "item": {
+            "fieldName": "last_consume_time",
+            "fieldType": "date"
+          },
+          "comparisonOperator": "lte",
+          "values": [
+            "20180301000000"
+          ],
+          "id": "C8042FC590700001343614B013107240",
+          "nodeType": "condition"
+        },
+        {
+          "item": {
+            "fieldName": "total_consume_cnt",
+            "fieldType": "number"
+          },
+          "comparisonOperator": "gte",
+          "values": [
+            "10"
+          ],
+          "id": "C8042FC7D9700001913E17671A902420",
+          "nodeType": "condition"
+        },
+        {
+          "item": {
+            "fieldName": "total_consume_amt",
+            "fieldType": "number"
+          },
+          "comparisonOperator": "gte",
+          "values": [
+            "5"
+          ],
+          "id": "C8042FEBC1A000017C571620F5304A10",
+          "nodeType": "condition"
+        }
+      ],
+      "nodeType": "group",
+      "operator": "and"
+    }
+  ],
+  "operator": "and"
+}
